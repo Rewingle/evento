@@ -1,5 +1,5 @@
-import CardImage from "../CardImage";
 import Image from "next/image";
+import { CalendarPlus } from 'lucide-react';
 const isToday = (date: string): boolean => {
     const today = new Date();
     const eventDate = new Date(date);
@@ -22,24 +22,63 @@ const isTomorrow = (date: string): boolean => {
 
 export default function ConcertCard(props: { title: string, description: string, imageUrl: string, date: string, time: string }) {
     const time = props.time.toString().slice(0, -3)
+    const people = [
+        {
+            name: 'John',
+            color: 'purple'
+        },
+        {
+            name: 'Mane',
+            color: 'blue'
+        },
 
+    ]
     return (
-        <div className='w-52 h-52 grid grid-rows-8 text-black shadow-md bg-gray-50 '>
-            <div className='row-span-6 rounded-t-sm'>
+        <div className='w-52 h-64 grid grid-rows-12 text-black shadow-md bg-gray-50 '>
+            <div className='row-span-5 h-full w-full relative'>
                 {/* <CardImage imageUrl={props.imageUrl}/> */}
-                <Image alt="event-cover" width={208} height={156} src={props.imageUrl}/>
+                <Image alt="event-cover" fill style={{ objectFit: "contain" }} src={props.imageUrl} />
             </div>
-            <div className='row-span-1'>
-                <div className='w-52 font-bold px-2 truncate '>{props.title}</div>
+            <div className='row-span-3 break-words h-full line-clamp-2 text-sm font-bold p-2'>
+                {props.title}
             </div>
-            <div className="px-2 row-span-1">
-                <div>
-                    {
-                        isToday(props.date) ? ('Today   ' + time) : isTomorrow(props.date) ? ('Tomorrow  ' + time) : props.date
-                    }
+            <div className=" row-span-4 text-sm p-2">
+
+                {isToday(props.date) ?
+                    <div className="flex justify-between">
+                        <span>Today</span>
+                        <span>{time}</span>
+                    </div>
+                    : isTomorrow(props.date) ?
+                        <div className="flex justify-between">
+                            <span>Tomorrow</span>
+                            <span>{time}</span>
+                        </div>
+                        :
+                        <div className="flex justify-between">
+                            <span>{props.date}</span>
+                            <span>{time}</span>
+                        </div>
+                }
+                <br />
+                <div className="w-full grid grid-cols-12 h-full text-black opacity-75">
+                    <div className="col-span-1">
+                        <CalendarPlus />
+                    </div>
+                    <div className="flex justify-end col-span-8 size-full">
+                        <div className="relative z-0 w-12">
+                            <div className={`rounded-full bg-${people[0].color}-500 w-8 h-8 flex justify-center items-center text-sm font-bold `}>{people[0].name[0]}</div>
+
+                            <div className={`rounded-full bg-green-500 absolute inset-y-0 left-4 z-10 w-8 h-8 flex justify-center items-center text-sm font-bold`}>{people[1].name[0]}</div>
+
+                        </div>
+                    </div>
+                    <div className="col-span-3 text-center flex h-8 items-center justify-center font-bold">+{Math.floor(Math.random() * 500) + 1}</div>
+
                 </div>
 
             </div>
         </div>
     )
+
 }

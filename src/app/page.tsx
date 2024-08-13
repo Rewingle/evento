@@ -1,26 +1,67 @@
 
 import getConcerts from "@/actions/getConcerts";
 import ConcertCard from "@/components/ui/concertCard";
+import { Settings2 } from 'lucide-react';
 
 import { auth } from '@/auth'
+import Link from "next/link";
 
 export default async function Home() {
 
   const concerts = await getConcerts()
 
   const session = await auth();
+
+  const categories: { name: string, url: string }[] = [
+    {
+      name: 'Concerts',
+      url: '/concerts'
+    },
+    {
+      name: 'Sports',
+      url: '/sports'
+    },
+    {
+      name: 'Theatre',
+      url: '/theatre'
+    },
+    {
+      name: 'Festivals',
+      url: '/festivals'
+    },
+    {
+      name: 'Comedy',
+      url: '/comedy'
+    },
+
+  ]
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-0 py-12 md:p-0 lg:p-24 bg-white">
-      <div>{session ? session?.user?.email : 'no session'}</div>
+      <div className="flex justify-evenly items-center w-full">
+        {categories.map((category, index) => (
+          <Link href={'/categories' + category.url}>
+            <div key={index} className="rounded-2xl shadow-lg bg-white flex justify-center items-center text-lg py-2 px-4"> {category.name}</div>
+          </Link>
+        ))}
+        <div className="rounded-2xl shadow-lg bg-white flex justify-center items-center py-2 px-4 hover:cursor-pointer">
+          <Settings2 /> <span className="ml-2 ">Filter</span>
+        </div>
+      </div>
+      <br />
+      <div className="w-full border-b-2 border-black"></div>
+      <br />
       <div className="grid grid-cols-2 md:grid-cols-4 grid-flow-row gap-4">
         {concerts && concerts.map((concert: any, index: any) => (
+
           <ConcertCard key={index}
             title={concert.name}
             description={'concert.dates.start[0].toString()'}
-            imageUrl={concert.images[0].url}
+            imageUrl={'https://storage.googleapis.com/eventogether-general/TM_GenCatImgs_Generic_BW.jpg'}
             date={concert.dates.start.localDate.toString()}
             time={concert.dates.start.localTime.toString()}
           />
+
         ))}
       </div>
 
