@@ -4,8 +4,19 @@ const nextConfig = {
     images:{
         remotePatterns: [
             {
-                protocol: 'https',
+             
                 hostname: 's1.ticketm.net',
+            
+            },
+            {
+                protocol: 'https',
+                hostname: 'dummyimage.com',
+                port: '',
+                pathname: '/**'
+            },
+            {
+                protocol: 'https',
+                hostname: 'storage.googleapis.com',
                 port: '',
                 pathname: '/**'
             }

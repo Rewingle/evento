@@ -1,77 +1,131 @@
 "use client"
-import React, { startTransition, useState } from 'react'
+import React, { startTransition, useState, useTransition } from 'react'
 import { Input } from './ui/input'
-import { Label } from './ui/label'
+import { useSearchParams } from "next/navigation";
+
 import { SendHorizontal } from 'lucide-react'
 import { Button } from './ui/button'
 import { useForm } from 'react-hook-form'
-import { RegisterSchema } from '@/schemas'
+import { LoginSchema, RegisterSchema } from '@/schemas'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { insertUser } from '@/services/user'
 import Link from 'next/link'
+import { login } from '@/actions/login'
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
 
 type Props = {}
 
 const LoginCard = (props: Props) => {
-    const {
-        register,
-        handleSubmit,
-        formState: { errors }
-    } = useForm<z.infer<typeof RegisterSchema>>({
-        resolver: zodResolver(RegisterSchema),
+
+    const [isPending, startTransition] = useTransition();
+    const searchParams = useSearchParams();
+    const callbackUrl = searchParams.get("callbackUrl");
+    const form = useForm<z.infer<typeof LoginSchema>>({
+        resolver: zodResolver(LoginSchema),
         defaultValues: {
-            name: "",
+
             email: "",
             password: "",
-            terms: 0
+
         }
     })
 
-    const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
+    const onSubmit = (values: z.infer<typeof LoginSchema>) => {
         console.log(values)
         startTransition(() => {
-            insertUser(values).then((res) => {
-                alert('Logged In')
-            }).catch((err) => {
-                alert(err)
-            })
+            login(values, callbackUrl)
+                .then((res) => {
+                    if (res?.error) {
+                        form.reset();
+
+                    }
+                    alert('Logged In')
+                }).catch((err) => {
+                    alert(err)
+                })
         })
 
     }
 
 
     return (
-        <div className='shadow-xl rounded-lg w-96 h-[400px]'>
+        <div className='shadow-xl rounded-lg w-96 h-[360px]'>
             <div className='w-full h-12 bg-black rounded-t-lg flex items-center'>
-                <div className='text-white ml-4 text-xl'>REGISTER</div>
+                <div className='text-white ml-4 text-xl'>LOGIN</div>
             </div>
             <div className='p-8'>
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)}>
+                        <div>
 
-                    <Input {...register("email")} placeholder="Email" type="text" name="email"></Input>
-                    <div className='h-8 flex items-center'>
-                        {errors.email && <p className='text-sm text-red-500'>{errors.email?.message}</p>}
-                    </div>
-                    <Input {...register("password")} placeholder="Password" type="password" name="password"></Input>
-                    <div className='h-8 flex items-center'>
-                        {errors.password && <p className='text-sm text-red-500'>{errors.password?.message}</p>}
-                    </div>
-                    <div className='flex'>
 
-                        <span className='flex justify-end'>
-                            <Button type="submit" className='w-24'>
+                            <FormField
+                                control={form.control}
+                                name='email'
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Email</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                {...field}
+                                                disabled={isPending}
+                                                placeholder="john.doe@example.com"
+                                                type="email"
+                                            />
+                                        </FormControl>
+                                    </FormItem>
+
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name='password'
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Email</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                {...field}
+                                                disabled={isPending}
+                                                placeholder="******"
+                                                type="password"
+                                            />
+                                        </FormControl>
+
+                                    </FormItem>
+
+                                )}
+                            />
+                        </div>
+                        <br />
+                        <div className='grid grid-cols-2'>
+                            <Button
+                                size="sm"
+                                variant="link"
+                                asChild
+                                className="px-0 font-normal"
+                            >
+                                <Link href="/auth/reset">Forgot password?</Link>
+                            </Button>
+                            <Button disabled={isPending} type="submit" className="w-full">
                                 <SendHorizontal size={18} />
                             </Button>
-                        </span>
-                    </div>
+                        </div>
 
+                    </form>
+                </Form>
 
-
-                </form>
             </div>
             <div className='w-full text-center'>
-                <Link href={'/login'} className='hover:underline text-sm text-center'>Already have an account?</Link>
+                <Link href={'/register'} className='hover:underline text-sm text-center'>You don't have an account?</Link>
             </div>
         </div>
     )

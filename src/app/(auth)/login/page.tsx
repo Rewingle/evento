@@ -5,9 +5,8 @@ type Props = {}
 
 function LoginPage({}: Props) {
   return (
-    <div>
+    <div className='flex justify-center items-center'>
             <LoginCard/>
-
     </div>
   )
 }
