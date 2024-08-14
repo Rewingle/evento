@@ -1,16 +1,15 @@
 
-import getConcerts from "@/actions/getConcerts";
+import getEvents from "@/actions/getConcerts";
+import Events from "@/components/Events";
 import ConcertCard from "@/components/ui/concertCard";
+import { useSearchStore } from "@/store";
 import { Settings2 } from 'lucide-react';
 
-import { auth } from '@/auth'
 import Link from "next/link";
 
 export default async function Home() {
 
-  const concerts = await getConcerts()
-
-  const session = await auth();
+  const events = await getEvents()
 
   const categories: { name: string, url: string }[] = [
     {
@@ -49,21 +48,19 @@ export default async function Home() {
         </div>
       </div>
       <br />
-      <div className="w-full border-b-2 border-black"></div>
-      <br />
       <div className="grid grid-cols-2 md:grid-cols-4 grid-flow-row gap-4">
-        {concerts && concerts.map((concert: any, index: any) => (
+            { events && events.map((event: any, index: any) => (
 
-          <ConcertCard key={index}
-            title={concert.name}
-            description={'concert.dates.start[0].toString()'}
-            imageUrl={'https://storage.googleapis.com/eventogether-general/TM_GenCatImgs_Generic_BW.jpg'}
-            date={concert.dates.start.localDate.toString()}
-            time={concert.dates.start.localTime.toString()}
-          />
+                    <ConcertCard key={index}
+                        title={event.name}
+                        description={'concert.dates.start[0].toString()'}
+                        imageUrl={'https://storage.googleapis.com/eventogether-general/TM_GenCatImgs_Generic_BW.jpg'}
+                        date={event.dates.start.localDate.toString()}
+                        time={event.dates.start.localTime.toString()}
+                    />
 
-        ))}
-      </div>
+                ))}
+        </div>
 
     </main>
   );

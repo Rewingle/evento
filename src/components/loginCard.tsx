@@ -45,7 +45,6 @@ const LoginCard = (props: Props) => {
                 .then((res) => {
                     if (res?.error) {
                         form.reset();
-
                     }
                     alert('Logged In')
                 }).catch((err) => {

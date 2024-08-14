@@ -37,7 +37,9 @@ export default function RegisterCard({ }: Props) {
     })
 
     const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
+        console.log('ACCEPT TERMS PLS')
         if (!terms) {
+            console.log('ACCEPT TERMS PLS')
             setError("You must have accept Terms and Conditions")
             return;
         }
@@ -74,7 +76,7 @@ export default function RegisterCard({ }: Props) {
                     </div>
                     <div className='flex'>
                         <span className="flex items-center space-x-2 w-full">
-                            <Checkbox /* checked={terms} onChange={(e) => setTerms(e.target.checked)} */ />
+                            <Checkbox onCheckedChange={() => setTerms(!terms)}/>
                             <Label htmlFor="terms">Accept <a href="" className='underline'>terms & conditions</a></Label>
                         </span>
                         <span className='flex justify-end'>

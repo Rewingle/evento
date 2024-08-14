@@ -2,6 +2,7 @@
 import { db } from '@/lib/db';
 
 export const insertUser = async (user: any) => {
+  console.log('INSERT USER SERVICE')
   return await db.user.create({
     data: {
       name: user.name,

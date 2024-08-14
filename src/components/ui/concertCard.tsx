@@ -34,9 +34,8 @@ export default function ConcertCard(props: { title: string, description: string,
 
     ]
     return (
-        <div className='w-52 h-64 grid grid-rows-12 text-black shadow-md bg-gray-50 '>
+        <div className='w-52 h-64 grid grid-rows-12 text-black shadow-md bg-gray-50 transition hover:bg-slate-100'>
             <div className='row-span-5 h-full w-full relative'>
-                {/* <CardImage imageUrl={props.imageUrl}/> */}
                 <Image alt="event-cover" fill style={{ objectFit: "contain" }} src={props.imageUrl} />
             </div>
             <div className='row-span-3 break-words h-full line-clamp-2 text-sm font-bold p-2'>
@@ -67,7 +66,7 @@ export default function ConcertCard(props: { title: string, description: string,
                     </div>
                     <div className="flex justify-end col-span-8 size-full">
                         <div className="relative z-0 w-12">
-                            <div className={`rounded-full bg-${people[0].color}-500 w-8 h-8 flex justify-center items-center text-sm font-bold `}>{people[0].name[0]}</div>
+                            <div className={`rounded-full bg-purple-500 w-8 h-8 flex justify-center items-center text-sm font-bold `}>{people[0].name[0]}</div>
 
                             <div className={`rounded-full bg-green-500 absolute inset-y-0 left-4 z-10 w-8 h-8 flex justify-center items-center text-sm font-bold`}>{people[1].name[0]}</div>
 

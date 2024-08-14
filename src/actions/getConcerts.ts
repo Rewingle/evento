@@ -1,11 +1,9 @@
 "use server"
 
-import axios from "axios";
+import getAllConcerts from "@/services/event";
 
-export default async function getConcerts() {
+export default async function getEvents() {
 
-    const res:any = await axios.get("https://app.ticketmaster.com/discovery/v2/events.json?countryCode=TR&apikey=QRRMCwuJTl5X04QUdcMf5F4GUC9xJ0qT");
-
-    return res.data._embedded.events as any
+    return getAllConcerts()
 
 }
