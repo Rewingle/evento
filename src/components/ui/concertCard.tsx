@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { CalendarPlus } from 'lucide-react';
+import Link from "next/link";
 const isToday = (date: string): boolean => {
     const today = new Date();
     const eventDate = new Date(date);
@@ -20,7 +21,7 @@ const isTomorrow = (date: string): boolean => {
     );
 };
 
-export default function ConcertCard(props: { title: string, description: string, imageUrl: string, date: string, time: string }) {
+export default function ConcertCard(props: { id: string, title: string, description: string, imageUrl: string, date: string, time: string }) {
     const time = props.time.toString().slice(0, -3)
     const people = [
         {
@@ -38,8 +39,11 @@ export default function ConcertCard(props: { title: string, description: string,
             <div className='row-span-5 h-full w-full relative'>
                 <Image alt="event-cover" fill style={{ objectFit: "contain" }} src={props.imageUrl} />
             </div>
-            <div className='row-span-3 break-words h-full line-clamp-2 text-sm font-bold p-2'>
-                {props.title}
+
+            <div className='row-span-3 break-words h-full line-clamp-2 text-sm font-bold p-2 hover:underline'>
+                <Link href={'/event/' + props.id}>
+                    {props.title}
+                </Link>
             </div>
             <div className=" row-span-4 text-sm p-2">
 
