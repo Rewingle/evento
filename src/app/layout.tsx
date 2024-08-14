@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
           <Navbar />
-        <div className="flex justify-center h-screen">
+        <div className="flex justify-center h-screen p-0 py-12 md:p-4 lg:py-32 lg:px-72">
           {children}
 
         </div>

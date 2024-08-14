@@ -1,15 +1,14 @@
 "use client"
-import React, { startTransition, useState, useTransition } from 'react'
+import React, {useTransition } from 'react'
 import { Input } from './ui/input'
 import { useSearchParams } from "next/navigation";
 
 import { SendHorizontal } from 'lucide-react'
 import { Button } from './ui/button'
 import { useForm } from 'react-hook-form'
-import { LoginSchema, RegisterSchema } from '@/schemas'
+import { LoginSchema } from '@/schemas'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { insertUser } from '@/services/user'
 import Link from 'next/link'
 import { login } from '@/actions/login'
 import {
@@ -46,7 +45,7 @@ const LoginCard = (props: Props) => {
                     if (res?.error) {
                         form.reset();
                     }
-                    alert('Logged In')
+          
                 }).catch((err) => {
                     alert(err)
                 })
@@ -89,7 +88,7 @@ const LoginCard = (props: Props) => {
                                 name='password'
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Email</FormLabel>
+                                        <FormLabel>Password</FormLabel>
                                         <FormControl>
                                             <Input
                                                 {...field}
