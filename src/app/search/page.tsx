@@ -28,6 +28,7 @@ function SearchResults({ }: Props) {
                 {events && events.map((event: any, index: any) => (
 
                     <ConcertCard key={index}
+                        id={ event.id}
                         title={event.name}
                         description={'concert.dates.start[0].toString()'}
                         imageUrl={'https://storage.googleapis.com/eventogether-general/TM_GenCatImgs_Generic_BW.jpg'}
