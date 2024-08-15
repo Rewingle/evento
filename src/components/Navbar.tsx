@@ -34,7 +34,7 @@ async function Navbar({ }: Props) {
                                 <MapPin/> <Location></Location>
                             </div>
                             <div>
-                                <Link href={'/profile'}>
+                                <Link href={'/me'}>
                                     <SquareUserRound size={42} />
                                 </Link>
                             </div>

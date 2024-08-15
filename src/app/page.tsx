@@ -44,7 +44,10 @@ export default async function Home() {
           <Settings2 /> <span className="ml-2 ">Filter</span>
         </div>
       </div>
+   
+       
       <br />
+
       <div className="grid grid-cols-2 md:grid-cols-4 grid-flow-row gap-4">
             { events && events.map((event: any, index: any) => (
                     <ConcertCard key={index}

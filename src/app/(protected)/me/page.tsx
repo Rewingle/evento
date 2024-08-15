@@ -3,6 +3,7 @@ import { useCurrentUser } from '@/hooks/useCurrentUser';
 import { MapPin } from 'lucide-react';
 import { PenLine } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import GroupCard from '@/components/GroupCard';
 
 async function Profile() {
     const user = await useCurrentUser();
@@ -33,7 +34,8 @@ async function Profile() {
 
                 </div>
                 <br />
-                <div>IMAGES AREA</div>
+              
+                    <br />
             </> : null
             }
         </div>

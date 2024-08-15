@@ -7,6 +7,9 @@ import { Ticket } from 'lucide-react';
 import { MapPin } from 'lucide-react';
 import Link from 'next/link';
 import { Castle } from 'lucide-react';
+import GroupCard from '@/components/GroupCard';
+import { dummyPeople } from '@/lib/dummy';
+import RoundedProfilePicture from '@/components/RoundedProfilePicture';
 
 
 type Props = {}
@@ -27,7 +30,7 @@ async function EventDetails({ params }: { params: { id: string } }) {
           </div>
         </Link>
         <div className='text-md flex space-x-2 text-sm'><Calendar size={16} /><p>{event.dates.start.localDate}</p></div>
-        <div className='text-md flex space-x-2 text-sm'><Clock size={16} /><p>{event.dates.start.localTime.slice(0,-3)}</p></div>
+        <div className='text-md flex space-x-2 text-sm'><Clock size={16} /><p>{event.dates.start.localTime.slice(0, -3)}</p></div>
       </div>
       <br />
       <div className='relative w-full h-60'>
@@ -60,7 +63,41 @@ async function EventDetails({ params }: { params: { id: string } }) {
           </div>
         </div>
       </div>
-      <div></div>
+      <br />
+      <div className='font-bold text-lg'>Groups</div>
+      <br />
+      <div className='grid grid-flow-col gap-4'>
+        <GroupCard
+          title={event.name}
+          people={dummyPeople.slice(0, 4)}
+        />
+        <GroupCard
+          title={event.name}
+          people={dummyPeople.slice(0, 4)}
+        />
+        <GroupCard
+          title={event.name}
+          people={dummyPeople.slice(0, 4)}
+        />
+        <GroupCard
+          title={event.name}
+          people={dummyPeople.slice(0, 4)}
+        />
+       
+        <div className='w-52 h-60 shadow-lg bg-white rounded-md p-2'>
+          <div>People</div>
+          <hr />
+          <br />
+          <div className='grid grid-cols-3 grid-rows-4 gap-2'>
+            {
+              dummyPeople.map((person, index) => (
+                <RoundedProfilePicture key={index} name={person.name}/>
+              ))
+            }
+          </div>
+
+        </div>
+      </div>
       <br />
       <div className='font-bold text-xl'>COMMENTS</div>
       <hr />
