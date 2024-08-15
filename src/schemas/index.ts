@@ -11,6 +11,10 @@ export const RegisterSchema = z.object({
         .max(255, { message: '🔴 Password must be maximum 255 characters' }),
     terms: z.literal(0).or(z.literal(1))
 })
+export const RegisterStepOneSchema = z.object({
+    profilePictureUrl: z.string().optional(),
+    bio: z.string().min(1).max(255, { message: '🔴 Bio must be maximum 255 characters' }).optional(),
+})
 
 export const LoginSchema = z.object({
     email: z.string()
