@@ -83,7 +83,6 @@ async function EventDetails({ params }: { params: { id: string } }) {
           title={event.name}
           people={dummyPeople.slice(0, 4)}
         />
-       
         <div className='w-52 h-60 shadow-lg bg-white rounded-md p-2'>
           <div>People</div>
           <hr />
@@ -91,7 +90,7 @@ async function EventDetails({ params }: { params: { id: string } }) {
           <div className='grid grid-cols-3 grid-rows-4 gap-2'>
             {
               dummyPeople.map((person, index) => (
-                <RoundedProfilePicture key={index} name={person.name}/>
+                <RoundedProfilePicture key={index} name={person.name} />
               ))
             }
           </div>

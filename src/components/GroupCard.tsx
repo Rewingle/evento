@@ -22,7 +22,6 @@ function GroupCard(props: Props) {
                     <p className='text-white line-clamp-1'>{props.title + ' Meeting'}</p>
                     <p className='absolute font-bold text-white text-xs line-clamp-1'>{props.title}</p>
                 </div>
-
             </div>
             <div className='px-4 py-2 row-span-8 grid grid-rows-12 rounded-b-md shadow-inner bg-gradient-to-t from-slate-950 to-slate-800'>
                 <div className='row-span-1 text-gray-400 text-xs'>Members</div>
@@ -43,7 +42,6 @@ function GroupCard(props: Props) {
                     <Button className='bg-indigo-600 w-full text-sm'>Join</Button>
                 </div>
             </div>
-
         </div>
     )
 }

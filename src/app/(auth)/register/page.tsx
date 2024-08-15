@@ -9,7 +9,6 @@ export default function LoginPage({ }: Props) {
     return (
         <div className='flex justify-center items-center'>
             <RegisterCard/>
-
         </div>
     )
 }

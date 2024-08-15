@@ -1,12 +1,12 @@
 "use client"
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { insertUser } from '@/services/user';
+import { insertUser } from '@/services/userService';
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { startTransition, useState, useTransition } from 'react'
 import * as z from "zod";
 import { RegisterSchema } from '@/schemas';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { SendHorizontal } from 'lucide-react';
 import { Label } from './ui/label';
 import { Checkbox } from './ui/checkbox';
@@ -19,6 +19,11 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
+import { redirect } from 'next/navigation';
+
+import Image from 'next/image';
+import Logo from '@/app/icon.svg'
+import { login } from '@/actions/login';
 
 type Props = {}
 
@@ -42,9 +47,8 @@ export default function RegisterCard({ }: Props) {
     })
 
     const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
-        console.log('ACCEPT TERMS PLS')
+
         if (!terms) {
-            console.log('ACCEPT TERMS PLS')
             setError("You must have accept Terms and Conditions")
             return;
         }
@@ -53,7 +57,9 @@ export default function RegisterCard({ }: Props) {
                 if (res?.error) {
                     form.reset();
                 }
-                alert('User Registered')
+                login({ email: values.email, password: values.password }).then((res) => {
+                    console.log('Login Successful')
+                }).catch((err) => { console.log(err) })
             }).catch((err) => {
                 alert(err)
             })
@@ -63,8 +69,9 @@ export default function RegisterCard({ }: Props) {
 
     return (
         <div className='shadow-xl rounded-lg w-96 h-[450px]'>
-            <div className='w-full h-12 bg-black rounded-t-lg flex items-center'>
+            <div className='w-full h-12 bg-black rounded-t-lg flex justify-between items-center'>
                 <div className='text-white ml-4 text-xl'>REGISTER</div>
+                <div><Image width={64} height={64} src={Logo} alt='logo' /></div>
             </div>
             <div className='p-8'>
                 <Form {...form}>
