@@ -34,7 +34,7 @@ export default async function Home() {
   ]
   return (
     <main className="flex min-h-screen flex-col items-center justify-between  bg-white">
-      <div className="flex justify-evenly items-center w-full">
+      <div className="flex justify-evenly items-center w-full overflow-x-scroll flex-nowrap">
         {categories.map((category, index) => (
           <Link href={'/categories' + category.url}>
             <div key={index} className="rounded-2xl shadow-lg bg-white flex justify-center items-center text-lg py-2 px-4"> {category.name}</div>

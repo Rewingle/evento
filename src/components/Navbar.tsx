@@ -18,7 +18,7 @@ async function Navbar({ }: Props) {
     return (
         <div className='w-full h-16 fixed bg-white shadow-lg z-50'>
             <div className='grid grid-cols-3 px-24'>
-                <div className=' w-full flex items-center justify-end'>
+                <div className=' w-full hidden md:flex items-center justify-end'>
                     <SearchBar />
                 </div>
                 <Link href={'/'}>
@@ -30,7 +30,7 @@ async function Navbar({ }: Props) {
                 <div className='h-full flex justify-start items-center'>
                     {session ?
                         <div className='flex space-x-8'>
-                            <div className='flex items-center justify-center'>
+                            <div className='hidden md:flex items-center justify-center '>
                                 <MapPin/> <Location></Location>
                             </div>
                             <div>

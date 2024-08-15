@@ -23,14 +23,14 @@ async function EventDetails({ params }: { params: { id: string } }) {
 
       <div className='font-bold text-2xl mb-4'>{event.name}</div>
 
-      <div className='flex w-full space-x-8 items-center'>
+      <div className='flex w-full space-x-3 md:space-x-8 px-2 items-center'>
         <Link href={event._embedded.venues[0].url}>
           <div className='text-md flex space-x-2 text-xs text-blue-800'>
             <Castle size={14} /><p>{event._embedded.venues[0].name}</p>
           </div>
         </Link>
-        <div className='text-md flex space-x-2 text-sm'><Calendar size={16} /><p>{event.dates.start.localDate}</p></div>
-        <div className='text-md flex space-x-2 text-sm'><Clock size={16} /><p>{event.dates.start.localTime.slice(0, -3)}</p></div>
+        <div className='text-md flex space-x-2 text-xs md:text-sm'><Calendar size={16} /><p>{event.dates.start.localDate}</p></div>
+        <div className='text-md flex space-x-2 text-xs md:text-sm'><Clock size={16} /><p>{event.dates.start.localTime.slice(0, -3)}</p></div>
       </div>
       <br />
       <div className='relative w-full h-60'>
@@ -40,13 +40,13 @@ async function EventDetails({ params }: { params: { id: string } }) {
       <div className='grid grid-cols-2'>
         <div className='col-span-1'>
           {event.dates.status.code == 'onsale' ?
-            <div className='relative'>
+            <div>
               <div className='flex w-32 justify-between font-bold text-lg items-center text-green-600'>
                 <Ticket size={32} /> <p>ON SALE</p>
               </div>
               <Link href={event._embedded.venues[0].url}>
-                <div className=' rounded-lg shadow-md p-4 font-bold'>
-                  BUY
+                <div className='w-40 rounded-lg shadow-md p-4 font-bold'>
+                  Buy from Biletix
                 </div>
               </Link>
             </div>
@@ -56,7 +56,7 @@ async function EventDetails({ params }: { params: { id: string } }) {
         </div>
         <div className='flex justify-end'>
           <div className='w-72 col-span-1'>
-            <div className='w-1/3 justify-evenly flex font-bold items-center'><MapPin size={16} /> Address</div>
+            <div className='w-1/3 justify-evenly flex font-bold items-center'><MapPin className='shrink-0' size={16} /> Address</div>
             <hr />
             <div>{event._embedded.venues[0].address.line1}</div>
             <div className='flex justify-end'>{event._embedded.venues[0].city.name + ',' + event._embedded.venues[0].country.name}</div>
@@ -66,33 +66,30 @@ async function EventDetails({ params }: { params: { id: string } }) {
       <br />
       <div className='font-bold text-lg'>Groups</div>
       <br />
-      <div className='grid grid-flow-col gap-4'>
-        <GroupCard
-          title={event.name}
-          people={dummyPeople.slice(0, 4)}
-        />
-        <GroupCard
-          title={event.name}
-          people={dummyPeople.slice(0, 4)}
-        />
-        <GroupCard
-          title={event.name}
-          people={dummyPeople.slice(0, 4)}
-        />
-        <GroupCard
-          title={event.name}
-          people={dummyPeople.slice(0, 4)}
-        />
-        <div className='w-52 h-60 shadow-lg bg-white rounded-md p-2'>
-          <div>People</div>
-          <hr />
-          <br />
-          <div className='grid grid-cols-3 grid-rows-4 gap-2'>
+      <div className='grid grid-cols-4 gap-4'>
+          {
+            [1,2,3,4].map((index) => (
+              <GroupCard
+                key={index}
+                title={event.name}
+                people={dummyPeople.slice(0, 4)}
+              />
+            ))
+          }
+        <div className='w-52 h-60 grid grid-rows-10 shadow-lg bg-white rounded-md p-2'>
+          <div className='row-span-2'>People</div>
+
+          <div className='row-span-6 grid grid-cols-3 grid-rows-3 gap-2 px-2'>
             {
               dummyPeople.map((person, index) => (
                 <RoundedProfilePicture key={index} name={person.name} />
               ))
             }
+          </div>
+          <div className='text-sm row-span-2 flex items-end justify-center hover:underline'>
+            <Link href={'/'}>
+              <p>+45 more people</p>
+            </Link>
           </div>
 
         </div>

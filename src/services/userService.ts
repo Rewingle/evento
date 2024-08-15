@@ -1,14 +1,16 @@
 "use server"
 import { db } from '@/lib/db';
+import { Prisma } from '@prisma/client';
 
 export const insertUser = async (user: any) => {
-  console.log('INSERT USER SERVICE')
+
   return await db.user.create({
     data: {
       name: user.name,
       email: user.email,
       password: user.password,
-
+      createdAt: new Date(),
+      updatedAt: new Date(),
     }
   })
 }

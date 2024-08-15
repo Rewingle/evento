@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 function Location() {
     const [location, setLocation] = useState<string | null>(null)
-    useEffect(() => {
+    /* useEffect(() => {
         console.log('use effect worked')
         navigator.geolocation.getCurrentPosition(function (position) {
             console.log("Latitude is :", position.coords.latitude);
@@ -20,9 +20,11 @@ function Location() {
 
             
         });
-    }, [])
+    }, []) */
+
+    //DISABLED FOR PRICING
     return (
-        <span>{location}</span>
+        <span>{'location'}</span>
     )
 
 

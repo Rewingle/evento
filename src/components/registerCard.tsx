@@ -19,7 +19,6 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import { redirect } from 'next/navigation';
 
 import Image from 'next/image';
 import Logo from '@/app/icon.svg'
@@ -30,9 +29,7 @@ type Props = {}
 export default function RegisterCard({ }: Props) {
 
     const [error, setError] = useState<string>("");
-    const [success, setSuccess] = useState<string>("");
     const [terms, setTerms] = useState<boolean>(false);
-
     const [isPending, startTransition] = useTransition();
 
 
@@ -57,9 +54,6 @@ export default function RegisterCard({ }: Props) {
                 if (res?.error) {
                     form.reset();
                 }
-                login({ email: values.email, password: values.password }).then((res) => {
-                    console.log('Login Successful')
-                }).catch((err) => { console.log(err) })
             }).catch((err) => {
                 alert(err)
             })
@@ -76,7 +70,7 @@ export default function RegisterCard({ }: Props) {
             <div className='p-8'>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)}>
-                        <div >
+                        <div>
                             <FormField
                                 control={form.control}
                                 name='name'
@@ -136,3 +130,65 @@ export default function RegisterCard({ }: Props) {
         </div>
     )
 }
+
+/* const StepOne = () => {
+    return (
+        <div className='p-8'>
+            <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)}>
+                    <div>
+                        <FormField
+                            control={form.control}
+                            name='name'
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <Input {...field} disabled={isPending} placeholder='Name' />
+                                    </FormControl>
+                                    <div className='h-8'><FormMessage /></div>
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name='email'
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <Input {...field} disabled={isPending} type='email' placeholder='Email' />
+                                    </FormControl>
+                                    <div className='h-8'><FormMessage /></div>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name='password'
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <Input {...field} disabled={isPending} placeholder='Password' type='password' />
+                                    </FormControl>
+                                    <div className='h-8'><FormMessage /></div>
+                                </FormItem>
+                            )}
+                        />
+
+                        <div className='flex'>
+                            <span className="flex items-center space-x-2 w-full">
+                                <Checkbox onCheckedChange={() => setTerms(!terms)} />
+                                <Label htmlFor="terms">Accept <a href="" className='underline'>terms & conditions</a></Label>
+                            </span>
+                            <span className='flex justify-end'>
+                                <Button type="submit" className='w-24'>
+                                    <SendHorizontal size={18} />
+                                </Button>
+                            </span>
+                        </div>
+                    </div>
+                </form>
+            </Form>
+        </div>
+    )
+} */
