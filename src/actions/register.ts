@@ -13,13 +13,13 @@ export const login = async (
         return { error: "Invalid fields" }
     }
     const { name, email, password } = validatedFields.data;
-
+    
     try {
         const res = await insertUser({ name, email, password })
         if(!res) {
             return { error: "Something went wrong!" }
         }
-        return { success: true }
+        return res
 
     } catch {
         return { error: "Something went wrong!" }

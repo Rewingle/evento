@@ -9,6 +9,8 @@ export const insertUser = async (user: any) => {
       name: user.name,
       email: user.email,
       password: user.password,
+      dob: user.dob,
+      gender: user.gender,
       createdAt: new Date(),
       updatedAt: new Date(),
     }

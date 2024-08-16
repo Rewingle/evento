@@ -49,7 +49,7 @@ async function Navbar({ }: Props) {
 
                         </div>
                         :
-                        <div className='space-x-8'>
+                        <div className='space-x-8 flex'>
 
                             <Link href={'/register'}>
                                 <Button>

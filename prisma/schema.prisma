@@ -7,28 +7,18 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+model User {
+    id        String   @id @default(cuid())
+    email     String   @unique
+    name      String
+    password  String
+    gender    String
+    dob       DateTime
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
 enum UserRole {
     USER
     ADMIN
-}
-
-model Event {
-    id          String   @id @default(cuid())
-    title       String
-    description String
-    date        DateTime
-    location    String
-    user        User     @relation(fields: [userId], references: [id])
-    userId      String
-}
-
-model User {
-    id       String  @id @default(cuid())
-    email    String  @unique
-    isEmailVerified Boolean @default(false)
-    name     String
-    password String
-    events   Event[]
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
 }
