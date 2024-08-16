@@ -1,5 +1,10 @@
 import * as z from "zod"
 
+const genres = ["rock", "metal", "pop", "jazz", "blues", "hip-hop", "rap", "classical", "country", "reggae",
+    "folk", "indie", "electronic", "dance", "house", "techno", "trance", "dubstep", "punk", "alternative"] as const
+
+const genreEnum = z.enum(genres)
+    
 export const RegisterSchema = z.object({
     name: z.string()
         .min(2, { message: '🔴 Name must be minimum 2 characters' })
@@ -14,6 +19,11 @@ export const RegisterSchema = z.object({
 export const RegisterStepOneSchema = z.object({
     profilePictureUrl: z.string().optional(),
     bio: z.string().min(1).max(255, { message: '🔴 Bio must be maximum 255 characters' }).optional(),
+})
+export const RegisterStepTwoSchema = z.object({
+    gender: z.enum(["female", "male", ""]),
+    dob: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    preferedGenres: z.array(genreEnum).or(z.null())
 })
 
 export const LoginSchema = z.object({
