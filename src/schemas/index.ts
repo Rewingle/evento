@@ -22,7 +22,7 @@ export const RegisterStepOneSchema = z.object({
 })
 export const RegisterStepTwoSchema = z.object({
     gender: z.enum(["female", "male", ""]),
-    dob: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    dob: z.any(),
     preferedGenres: z.array(genreEnum).or(z.null())
 })
 
