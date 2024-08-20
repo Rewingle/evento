@@ -46,7 +46,7 @@ async function EventDetails({ params }: { params: { id: string } }) {
                 <div className='flex w-32 justify-between font-bold text-lg items-center text-green-600'>
                   <Ticket size={32} /> <p>ON SALE</p>
                 </div>
-                <Link href={event._embedded.venues[0].url}>
+                <Link href={event.url}>
                   <div className='w-40 rounded-lg shadow-md p-4 font-bold'>
                     Buy from Biletix
                   </div>

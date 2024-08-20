@@ -30,7 +30,7 @@ function SearchBar({ }: Props) {
             <div className='flex h-full justify-center items-center'>
                 <Input onChange={(e) => setQuery(e.target.value)} className='w-64 text-md' placeholder='Search Events...' />
 
-                <Link href={pathname !== '/search' ? '/search' + (pathname + '?' + createQueryString('query', query)) : (pathname + '?' + createQueryString('query', query))}>
+                <Link href={'/search' + '?' + createQueryString('query', query)}>
                     <div className='ml-2 p-2 rounded-full bg-white hover:bg-black transition'>
                         <Search size={24} className='text-black hover:text-white transition'/>
                     </div>

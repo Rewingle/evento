@@ -1,9 +1,9 @@
 "use server"
 
-import { getAllConcertsService } from "@/services/eventService";
+import { getAllEventsService } from "@/services/eventService";
 
 export default async function getEvents() {
 
-    return getAllConcertsService()
+    return getAllEventsService(10)
 
 }
