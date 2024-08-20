@@ -3,11 +3,16 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { PopoverTrigger } from "@radix-ui/react-popover";
+import { Popover, PopoverContent } from "./ui/popover";
+import { MapPin } from "lucide-react";
+import { Button } from "./ui/button";
 function Location() {
     const [cities, setCity] = useState<string[] | null>(null)
     const [countries, setCountries] = useState<string[] | null>(null)
-    const [selectedCountry, setSelectedCountry] = useState<string | null>()
+    const [selectedCountry, setSelectedCountry] = useState<any>(null)
     const [selectedCity, setSelectedCity] = useState<string | null>(null)
+    const [isDisabled, setDisabled] = useState<boolean>(false)
     /* useEffect(() => {
         console.log('use effect worked')
         navigator.geolocation.getCurrentPosition(function (position) {
@@ -38,9 +43,12 @@ function Location() {
         }
         getCountry()
     }, [])
-   
-    const getCities = async(country: string) => {
-        if(selectedCountry === country) return
+
+    const getCities = async (country: string) => {
+        setDisabled(true)
+        console.log("GET CITIES")
+        if (selectedCountry === country) return
+        console.log("GETTING IT")
         const { data: cities } = await axios.post(
             'https://countriesnow.space/api/v0.1/countries/cities',
             new URLSearchParams({
@@ -48,35 +56,54 @@ function Location() {
             })
         );
         setCity(cities.data)
+        setDisabled(false)
     }
     return (
         <>
+            <Popover>
+                <PopoverTrigger>
+                    <div className='hidden md:flex items-center justify-center'>
+                        <MapPin /> {selectedCity + ' ' + selectedCountry?.iso2.toLowerCase()}
+                    </div>
+                </PopoverTrigger>
+                <PopoverContent className='w-64'>
+                    <div className='space-y-4'>
+                        <div>Change Address</div>
 
-            <Select>
-                <SelectTrigger className='h-8'>
-                    <SelectValue placeholder="Country" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectGroup>
-                        {countries && countries.map((country: any, index: number) => {
-                            return <SelectItem key={index} value={country.name} onClick={() => getCities(country.name)}>{country.name}</SelectItem>;
-                        })}
+                        <Select onValueChange={(country: any) => { setSelectedCountry(country); getCities(country.name) }}>
+                            <SelectTrigger className='h-8'>
+                                <SelectValue placeholder={selectedCountry ? selectedCountry.name : 'Country'} />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    {countries && countries.map((country: any, index: number) => {
+                                        return <SelectItem key={index} value={country}>{country.name + country.iso2} </SelectItem>;
+                                    })}
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                        <Select disabled={isDisabled} onValueChange={(city: string) => setSelectedCity(city)}>
+                            <SelectTrigger className='h-8'>
+                                <SelectValue placeholder={selectedCity ? selectedCity : 'City'} />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    {cities && cities?.map((city: string, index: number) => {
+                                        return <SelectItem key={index} value={city}>{city}</SelectItem>;
+                                    })}
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                        <div className="w-full justify-end flex"><Button className="bg-emerald-900"
+                        onClick={()=>{
+                            
+                        }}>SAVE</Button></div>
+                    </div>
 
-                    </SelectGroup>
-                </SelectContent>
-            </Select>
-            <Select>
-                <SelectTrigger className='h-8'>
-                    <SelectValue placeholder="City" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectGroup>
-                        {cities && cities?.map((city: string, index: number) => {
-                            return <SelectItem key={index} value={city} onClick={() => setSelectedCity(city)}>{city}</SelectItem>;
-                        })}
-                    </SelectGroup>
-                </SelectContent>
-            </Select>
+                </PopoverContent>
+            </Popover>
+
+
         </>
     )
 

@@ -9,20 +9,12 @@ import { SquareUserRound } from 'lucide-react';
 import { MapPin } from 'lucide-react';
 import Logo from '@/app/icon.svg'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from './ui/select'
-import axios from 'axios'
 type Props = {}
 
 async function Navbar({ }: Props) {
 
     const session = await auth();
-    const { data: cities } = await axios.post(
-        'https://countriesnow.space/api/v0.1/countries/cities',
-        new URLSearchParams({
-          'country': 'nigeria'
-        })
-      );
-
+  
     return (
         <div className='w-full fixed bg-white shadow-lg z-50'>
             <div className='grid grid-cols-3 px-24'>
@@ -38,20 +30,7 @@ async function Navbar({ }: Props) {
                 <div className='h-full flex justify-start items-center'>
                     {session ?
                         <div className='flex space-x-8'>
-                            <Popover>
-                                <PopoverTrigger>
-                                    <div className='hidden md:flex items-center justify-center'>
-                                        <MapPin /> {'Istanbul'}
-                                    </div>
-                                </PopoverTrigger>
-                                <PopoverContent className='w-64'>
-                                    <div className='space-y-4'>
-                                        <div>Change Address</div>
-
-                                        <Location/>
-                                    </div>
-                                </PopoverContent>
-                            </Popover>
+                            <Location/>
                             <div>
                                 <Link href={'/me'}>
                                     <SquareUserRound size={42} />
