@@ -33,9 +33,8 @@ export default async function Home() {
 
   ]
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between  bg-white">
-      <div>EVENTO</div>
-      <div className="flex justify-evenly items-center w-full overflow-x-scroll flex-nowrap">
+    <main className="flex min-h-screen flex-col items-center justify-between">
+      <div className="flex justify-evenly items-center w-full">
         {categories.map((category, index) => (
           <Link href={'/categories' + category.url}>
             <div key={index} className="rounded-2xl shadow-lg bg-white flex justify-center items-center text-lg py-2 px-4"> {category.name}</div>

@@ -16,7 +16,7 @@ async function Navbar({ }: Props) {
 
 
     return (
-        <div className='w-full h-16 fixed bg-white shadow-lg z-50'>
+        <div className='w-full fixed bg-white shadow-lg z-50'>
             <div className='grid grid-cols-3 px-24'>
                 <div className=' w-full hidden md:flex items-center justify-end'>
                     <SearchBar />

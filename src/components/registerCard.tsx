@@ -84,7 +84,6 @@ export default function RegisterCard({ }: Props) {
     }
 
     return (
-        <>
             <div className='shadow-xl rounded-lg w-96 h-[580px]'>
                 <div className='w-full h-12 bg-black rounded-t-lg flex justify-between items-center'>
                     <div className='text-white ml-4 text-xl'>REGISTER</div>
@@ -227,6 +226,5 @@ export default function RegisterCard({ }: Props) {
                     <Link href={'/login'} className='hover:underline text-sm text-center'>Already have an account?</Link>
                 </div>
             </div>
-        </>
     )
 }

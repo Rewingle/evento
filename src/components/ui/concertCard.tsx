@@ -35,7 +35,7 @@ export default function ConcertCard(props: { id: string, title: string, descript
 
     ]
     return (
-        <div className='w-52 h-64 grid grid-rows-12 text-black shadow-md bg-gray-50 transition hover:bg-slate-100'>
+        <div className='w-44 h-56 md:w-52 md:h-64 grid grid-rows-12 text-black shadow-md bg-gray-50 transition hover:bg-slate-100'>
             <div className='row-span-5 h-full w-full relative'>
                 <Image alt="event-cover" fill style={{ objectFit: "contain" }} src={props.imageUrl} />
             </div>
