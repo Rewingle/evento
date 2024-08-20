@@ -7,12 +7,15 @@ import { PopoverTrigger } from "@radix-ui/react-popover";
 import { Popover, PopoverContent } from "./ui/popover";
 import { MapPin } from "lucide-react";
 import { Button } from "./ui/button";
+import { useLocation } from "@/app/store/store";
 function Location() {
     const [cities, setCity] = useState<string[] | null>(null)
     const [countries, setCountries] = useState<string[] | null>(null)
     const [selectedCountry, setSelectedCountry] = useState<any>(null)
     const [selectedCity, setSelectedCity] = useState<string | null>(null)
     const [isDisabled, setDisabled] = useState<boolean>(false)
+
+    const iso2FlagEmoji = (iso:any) => String.fromCodePoint(...[...iso.toUpperCase()].map(char => char.charCodeAt(0) + 127397));
     /* useEffect(() => {
         console.log('use effect worked')
         navigator.geolocation.getCurrentPosition(function (position) {
@@ -58,26 +61,31 @@ function Location() {
         setCity(cities.data)
         setDisabled(false)
     }
+    const location = useLocation((state: any) => state)
+    const setCountryStore = useLocation((state: any) => state.setCountry)
+    const setCityStore = useLocation((state: any) => state.setCity)
     return (
         <>
             <Popover>
                 <PopoverTrigger>
-                    <div className='hidden md:flex items-center justify-center'>
-                        <MapPin /> {selectedCity + ' ' + selectedCountry?.iso2.toLowerCase()}
+                    <div className='hidden md:flex items-center justify-start w-52 border-2 border-black p-1 rounded-md'>
+                      
+                            <MapPin /> {location.city && location.country.iso2 ? location.city + ' ' + iso2FlagEmoji(location.country.iso2)  : <p>Choose City</p>}
+                    
                     </div>
                 </PopoverTrigger>
                 <PopoverContent className='w-64'>
                     <div className='space-y-4'>
                         <div>Change Address</div>
 
-                        <Select onValueChange={(country: any) => { setSelectedCountry(country); getCities(country.name) }}>
+                        <Select onValueChange={(country: any) => { setCity([]); setSelectedCountry(country); getCities(country.name) }}>
                             <SelectTrigger className='h-8'>
                                 <SelectValue placeholder={selectedCountry ? selectedCountry.name : 'Country'} />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
                                     {countries && countries.map((country: any, index: number) => {
-                                        return <SelectItem key={index} value={country}>{country.name + country.iso2} </SelectItem>;
+                                        return <SelectItem className="hover:cursor" key={index} value={country}>{country.name + country.iso2} </SelectItem>;
                                     })}
                                 </SelectGroup>
                             </SelectContent>
@@ -89,15 +97,15 @@ function Location() {
                             <SelectContent>
                                 <SelectGroup>
                                     {cities && cities?.map((city: string, index: number) => {
-                                        return <SelectItem key={index} value={city}>{city}</SelectItem>;
+                                        return <SelectItem className="hover:cursor" key={index} value={city}>{city}</SelectItem>;
                                     })}
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
                         <div className="w-full justify-end flex"><Button className="bg-emerald-900"
-                        onClick={()=>{
-                            
-                        }}>SAVE</Button></div>
+                            onClick={() => {
+                                setCountryStore(selectedCountry); setCityStore(selectedCity)
+                            }}>SAVE</Button></div>
                     </div>
 
                 </PopoverContent>
