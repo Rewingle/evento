@@ -11,13 +11,12 @@ import GroupCard from '@/components/GroupCard';
 import { dummyPeople } from '@/lib/dummy';
 import RoundedProfilePicture from '@/components/RoundedProfilePicture';
 
-
 type Props = {}
 
 async function EventDetails({ params }: { params: { id: string } }) {
 
   const event = await getEventDetails(params.id)
-
+  let buyFromUrl = (new URL(event.url)).hostname.split('.')[1]
   return (
     <div className='w-full h-full'>
 
@@ -47,8 +46,8 @@ async function EventDetails({ params }: { params: { id: string } }) {
                   <Ticket size={32} /> <p>ON SALE</p>
                 </div>
                 <Link href={event.url}>
-                  <div className='w-40 rounded-lg shadow-md p-4 font-bold'>
-                    Buy from Biletix
+                  <div className='rounded-lg shadow-md p-4 font-bold'>
+                    Buy from {buyFromUrl}
                   </div>
                 </Link>
               </div>

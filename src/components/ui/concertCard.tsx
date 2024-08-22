@@ -66,7 +66,7 @@ export default function ConcertCard(props: { id: string, title: string, descript
                     }
                     <br />
                     <div className="w-full grid grid-cols-12 h-full text-black opacity-75">
-                        <div className="col-span-2 hover:bg-red-400 size-full">
+                        <div className="col-span-2 size-full">
                             <CalendarPlus />
                         </div>
                         <div className="flex justify-end col-span-7 size-full">
