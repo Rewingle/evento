@@ -3,17 +3,41 @@ import axios from "axios"
 import { ticketmasterApi } from "./api"
 import { IEvent } from "@/models/Event"
 import Geohash from 'latlon-geohash';
-
+/* import ngeohash from 'ngeohash' */
+import { cookies } from 'next/headers'
 const PATH = '/discovery/v2'
 const LOCALE = process.env.TICKETMASTER_LOCALE
 const API_KEY = process.env.TICKETMASTER_API_KEY
 
-const loc = Geohash.encode(41.0247, 28.9252, 5);
+
 
 export async function getAllEventsService(size: number) {
-    console.dir(loc)
-    const res = await ticketmasterApi.get(`https://app.ticketmaster.com/discovery/v2/suggest?apikey=${API_KEY}&geoPoint=${loc}`)
-    return res.data._embedded.events as IEvent[]
+
+
+    try {
+        const cookieStore = cookies()
+        const city = cookieStore.get('city') as unknown as any
+        const cityValue = JSON.parse(city.value)
+        console.log('TAK')
+        console.log(cityValue.lat)
+        console.log(cityValue.lng)
+        console.log(typeof (cityValue.lat))
+        console.log(typeof (cityValue.lat))
+        if (cityValue.lat && cityValue.lng) {
+            console.log('LOCATION EXISTT')
+            const lat = cityValue.lat 
+            const lng = cityValue.lng 
+            console.log(lat, lng)
+            console.log(Math.round(lat.replace(",",".")), Math.round(lng.replace(",",".")))
+    /*         const loc = Geohash.encode(Math.round(lat), Math.round(lng),4);
+     */        const res = await ticketmasterApi.get(`${PATH}/suggest?apikey=${API_KEY}&latlong=${Math.round(lat.replace(",",".")) +','+ Math.round(lng.replace(",","."))}`)
+            return res.data._embedded.events as IEvent[]
+        }
+    }
+    catch {
+        const res = await ticketmasterApi.get(`${PATH}/suggest?apikey=${API_KEY}`)
+        return res.data._embedded.events as IEvent[]
+    }
 }
 export async function getEventDetailsService(id: string) {
     //PATH /discovery/v2/events/{id}

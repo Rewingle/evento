@@ -8,14 +8,35 @@ import { Popover, PopoverContent } from "./ui/popover";
 import { MapPin } from "lucide-react";
 import { Button } from "./ui/button";
 import { useLocation } from "@/app/store/store";
-function Location() {
-    const [cities, setCity] = useState<string[] | null>(null)
-    const [countries, setCountries] = useState<string[] | null>(null)
-    const [selectedCountry, setSelectedCountry] = useState<any>(null)
-    const [selectedCity, setSelectedCity] = useState<string | null>(null)
-    const [isDisabled, setDisabled] = useState<boolean>(false)
+import { getCookie, setCookie } from "cookies-next"
+import { db } from '@/lib/db';
+import { getCountriesService, getCitiesService } from "@/services/location";
 
-    const iso2FlagEmoji = (iso:any) => String.fromCodePoint(...[...iso.toUpperCase()].map(char => char.charCodeAt(0) + 127397));
+interface City {
+    name: string
+    lat: string
+    lng: string
+}
+interface Country {
+    name: string
+    iso2: string
+}
+
+function Location() {
+
+    const [cities, setCities] = useState<City[] | null>(null)
+    const [countries, setCountries] = useState<Country[] | null>(null)
+
+    const [city, setCity] = useState<{ name: string, lat: string, lng: string } | null>(null)
+    const [country, setCountry] = useState<{ name: string, iso2: string } | null>(null)
+
+    const [selectedCountry, setSelectedCountry] = useState<any>(null)
+    const [selectedCity, setSelectedCity] = useState<any>(null)
+
+    const [isDisabled, setDisabled] = useState<boolean>(false)
+    const [checkCookie, setCheckCookie] = useState<boolean>(false)
+
+    const iso2FlagEmoji = (iso: any) => String.fromCodePoint(...[...iso.toUpperCase()].map(char => char.charCodeAt(0) + 127397));
     /* useEffect(() => {
         console.log('use effect worked')
         navigator.geolocation.getCurrentPosition(function (position) {
@@ -38,73 +59,79 @@ function Location() {
 
     useEffect(() => {
         const getCountry = async () => {
-            const { data: countries } = await axios.get(
-                'https://countriesnow.space/api/v0.1/countries/flag/images'
-            );
+            const countries = await getCountriesService() as Country[]
             console.log(countries)
-            setCountries(countries.data)
+            setCountries(countries)
         }
         getCountry()
     }, [])
 
+    useEffect(() => {
+        try {
+            const countryCookie = JSON.parse(getCookie("country") as string)
+            const cityCookie = JSON.parse(getCookie("city") as string)
+            setCountry({ name: countryCookie.name, iso2: iso2FlagEmoji(countryCookie.iso2) })
+            setCity({ name: cityCookie.name, lat: cityCookie.lat, lng: cityCookie.lng })
+        } catch {
+            return
+        }
+    }, [checkCookie])
     const getCities = async (country: string) => {
         setDisabled(true)
-        console.log("GET CITIES")
         if (selectedCountry === country) return
         console.log("GETTING IT")
-        const { data: cities } = await axios.post(
-            'https://countriesnow.space/api/v0.1/countries/cities',
-            new URLSearchParams({
-                'country': country.toLowerCase()
-            })
-        );
-        setCity(cities.data)
+        const cities = await getCitiesService(country) as City[]
+        setCities(cities)
         setDisabled(false)
     }
-    const location = useLocation((state: any) => state)
-    const setCountryStore = useLocation((state: any) => state.setCountry)
-    const setCityStore = useLocation((state: any) => state.setCity)
+    /*     const location = useLocation((state: any) => state)
+        const setCountryStore = useLocation((state: any) => state.setCountry)
+        const setCityStore = useLocation((state: any) => state.setCity) */
+
     return (
         <>
             <Popover>
                 <PopoverTrigger>
-                    <div className='hidden md:flex items-center justify-start w-52 border-2 border-black p-1 rounded-md'>
-                      
-                            <MapPin /> {location.city && location.country.iso2 ? location.city + ' ' + iso2FlagEmoji(location.country.iso2)  : <p>Choose City</p>}
-                    
+                    <div className='hidden md:flex items-center justify-start w-52 border-2 border-gray-400 p-1 rounded-md'>
+
+                        <MapPin />
+                        {country && city ? city.name + ' ' + country.iso2 : <p>loading..</p>}
+
                     </div>
                 </PopoverTrigger>
                 <PopoverContent className='w-64'>
                     <div className='space-y-4'>
                         <div>Change Address</div>
 
-                        <Select onValueChange={(country: any) => { setCity([]); setSelectedCountry(country); getCities(country.name) }}>
+                        <Select onValueChange={(country: any) => { setCities([]); setSelectedCity(null); setSelectedCountry(country); getCities(country.name) }}>
                             <SelectTrigger className='h-8'>
                                 <SelectValue placeholder={selectedCountry ? selectedCountry.name : 'Country'} />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
                                     {countries && countries.map((country: any, index: number) => {
-                                        return <SelectItem className="hover:cursor" key={index} value={country}>{country.name + country.iso2} </SelectItem>;
+                                        return <SelectItem className="hover:cursor" key={index} value={country}>{country.name} </SelectItem>;
                                     })}
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
-                        <Select disabled={isDisabled} onValueChange={(city: string) => setSelectedCity(city)}>
+                        <Select disabled={isDisabled} onValueChange={(city: any) => { setSelectedCity(city) }}>
                             <SelectTrigger className='h-8'>
-                                <SelectValue placeholder={selectedCity ? selectedCity : 'City'} />
+                                <SelectValue placeholder={selectedCity?.name ? selectedCity.name : 'City'} />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
-                                    {cities && cities?.map((city: string, index: number) => {
-                                        return <SelectItem className="hover:cursor" key={index} value={city}>{city}</SelectItem>;
+                                    {cities && cities?.map((city: any, index: number) => {
+                                        return <SelectItem className="hover:cursor" key={index} value={city}>{city.name}</SelectItem>;
                                     })}
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
                         <div className="w-full justify-end flex"><Button className="bg-emerald-900"
                             onClick={() => {
-                                setCountryStore(selectedCountry); setCityStore(selectedCity)
+                                setCookie("country", JSON.stringify({ name: selectedCountry.name, iso2: selectedCountry.iso2 }))
+                                setCookie("city", JSON.stringify({ name: selectedCity.name, lat: selectedCity.lat, lng: selectedCity.lng }))
+                                setCheckCookie(!checkCookie)
                             }}>SAVE</Button></div>
                     </div>
 

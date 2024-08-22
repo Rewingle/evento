@@ -10,36 +10,13 @@ export default async function Home() {
   const events = await getEvents()
   let genres: any = []
 
-  events.forEach(event => {
+  events?.forEach(event => {
     const genre = event.classifications[0].genre.name;
     if (!genres.includes(genre)) {
       genres.push(genre);
     }
   });
 
-  const categories: { name: string, url: string }[] = [
-    {
-      name: 'Concerts',
-      url: '/concerts'
-    },
-    {
-      name: 'Sports',
-      url: '/sports'
-    },
-    {
-      name: 'Theatre',
-      url: '/theatre'
-    },
-    {
-      name: 'Festivals',
-      url: '/festivals'
-    },
-    {
-      name: 'Comedy',
-      url: '/comedy'
-    },
-
-  ]
   return (
     <Suspense fallback={<div className="font-bold text-2xl">LOADING</div>}>
       <main className="flex min-h-screen flex-col items-center">

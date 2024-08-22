@@ -1,24 +1,42 @@
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-    id        String   @id @default(cuid())
-    email     String   @unique
-    name      String
-    password  String
-    gender    String
-    dob       DateTime
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  dob       DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  gender    String
+}
+
+model cities {
+  id      Int     @id(map: "id")
+  name    String? @db.VarChar(255)
+  lat     String? @db.VarChar(64)
+  lng     String? @db.VarChar(64)
+  country String? @db.VarChar(255)
+
+  @@unique([country, id])
+}
+
+model countries {
+  id   Int     @id
+  name String  @db.VarChar(255)
+  iso2 String? @db.VarChar(64)
+
+  @@unique([name, id])
 }
 
 enum UserRole {
-    USER
-    ADMIN
+  USER
+  ADMIN
 }
