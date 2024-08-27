@@ -11,9 +11,13 @@ export default async function Home() {
   let genres: any = []
 
   events?.forEach(event => {
-    const genre = event.classifications[0].genre.name;
-    if (!genres.includes(genre)) {
-      genres.push(genre);
+    try{
+      const genre = event.classifications[0].genre.name;
+      if (!genres.includes(genre)) {
+        genres.push(genre);
+      }
+    }catch{
+      return
     }
   });
 
@@ -40,8 +44,8 @@ export default async function Home() {
               title={event.name}
               description={'concert.dates.start[0].toString()'}
               imageUrl={'https://storage.googleapis.com/eventogether-general/TM_GenCatImgs_Generic_BW.jpg'}
-              date={event.dates.start.localDate.toString()}
-              time={event.dates.start.localTime.toString()}
+              date={event.dates.start.localDate?? ""}
+              time={event.dates.start.localTime?? ""}
             />
           ))}
 

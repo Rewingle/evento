@@ -25,12 +25,13 @@ export async function getAllEventsService(size: number) {
         console.log(typeof (cityValue.lat))
         if (cityValue.lat && cityValue.lng) {
             console.log('LOCATION EXISTT')
-            const lat = cityValue.lat 
-            const lng = cityValue.lng 
+            const lat = cityValue.lat
+            const lng = cityValue.lng
             console.log(lat, lng)
-            console.log(Math.round(lat.replace(",",".")), Math.round(lng.replace(",",".")))
-    /*         const loc = Geohash.encode(Math.round(lat), Math.round(lng),4);
-     */        const res = await ticketmasterApi.get(`${PATH}/suggest?apikey=${API_KEY}&latlong=${Math.round(lat.replace(",",".")) +','+ Math.round(lng.replace(",","."))}`)
+            console.log(lat.replace(",", "."), lng.replace(",", "."))
+            const res = await ticketmasterApi.get(`${PATH}/suggest?apikey=${API_KEY}&latlong=${lat.replace(",", ".") + ',' + lng.replace(",", ".")}`)
+            console.log(`https://app.ticketmaster.com${PATH}/suggest?apikey=${API_KEY}&latlong=${lat.replace(",", ".") + ',' + lng.replace(",", ".")}`)
+            console.log('EVENT COUNT '+res.data._embedded.events.length)
             return res.data._embedded.events as IEvent[]
         }
     }
@@ -52,5 +53,6 @@ export async function getQueryEventService(query: string, size: number) {
         return null
     }
     const event = data._embedded.events
+   
     return event as IEvent[]
 }
