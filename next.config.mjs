@@ -19,7 +19,13 @@ const nextConfig = {
                 hostname: 'storage.googleapis.com',
                 port: '',
                 pathname: '/**'
-            }
+            },
+            {
+                protocol: 'https',
+                hostname: 'images.universe.com',
+                port: '',
+                pathname: '/**'
+            },
         ]
     }
 };
