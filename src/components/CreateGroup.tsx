@@ -24,6 +24,7 @@ import { Slider } from "@/components/ui/slider"
 import { cn } from "@/lib/utils"
 import RoundedProfilePicture from './RoundedProfilePicture';
 import { UserRound } from 'lucide-react';
+import OutsideClickHandler from 'react-outside-click-handler';
 
 type Props = {}
 interface City {
@@ -42,11 +43,12 @@ function CreateGroup({ }: Props) {
     const [searchResults, setSearchResults] = React.useState<any | null>(null)
     const [search, setSearch] = React.useState<string>('')
     const [selectedCountry, setSelectedCountry] = React.useState<Country | null>(null)
+    const [showSearchResults, setShowSearchResults] = React.useState<boolean>(false)
 
     const [selectedCity, setSelectedCity] = React.useState<City | null>(null)
     const [cities, setCities] = React.useState<City[] | null>(null)
 
-    const [selectedEvent, setSelectecEvent] = React.useState<{ id: string, name: string, image: string, location: string } | null>(null)
+    const [selectedEvent, setSelectedEvent] = React.useState<{ id: string, name: string, image: string, location: string, date: string } | null>(null)
     const [isCityDisabled, setCityDisabled] = React.useState<boolean>(true)
 
     const [people, setPeople] = React.useState<number>(1)
@@ -79,20 +81,23 @@ function CreateGroup({ }: Props) {
         setSelectedCity(city)
         apiInput.start({
             from: {
+
                 y: 0,
             },
             to: {
+
                 y: 160,
             }
         })
     }
     const handleInputChange = async (e: any) => {
+        setShowSearchResults(true)
         setSearch(e.target.value)
         const searchResults = await getSearchEventsByLocation(e.target.value, { lat: selectedCity?.lat, lng: selectedCity?.lng })
         setSearchResults(searchResults)
     }
-    const handleSelectEvent = (event: { id: string, name: string, image: string, location: string }) => {
-        setSelectecEvent(event)
+    const handleSelectEvent = (event: { id: string, name: string, image: string, location: string, date: string }) => {
+        setSelectedEvent(event)
         setSearchResults(null)
         setSearch('')
         apiPeople.start({
@@ -108,8 +113,8 @@ function CreateGroup({ }: Props) {
             }
         })
     }
-    const PeoplePreview = ()=>{
-        for(let i = 0; i < people; i++){
+    const PeoplePreview = () => {
+        for (let i = 0; i < people; i++) {
             console.log(people)
             return <RoundedProfilePicture>
                 <UserRound />
@@ -118,7 +123,7 @@ function CreateGroup({ }: Props) {
     }
 
     return (
-        <div className='relative'>
+        <div>
             <div className='z-50 absolute w-96 h-44 rounded-xl shadow-xl border-2 
             border-black p-4 bg-gradient-to-t from-slate-950 to-slate-800 
             grid grid-rows-5 overflow-hidden'>
@@ -163,6 +168,7 @@ function CreateGroup({ }: Props) {
                 </div>
                 <div>
                     {selectedEvent &&
+
                         <div className='h-12 grid grid-cols-12 grid-rows-3 text-white'>
                             <div className='col-span-2 row-span-3 flex items-center justify-center'>
                                 <Image src={selectedEvent.image} alt="event-pic" width={36} height={36} />
@@ -171,28 +177,36 @@ function CreateGroup({ }: Props) {
                                 <p className='ml-4'>{selectedEvent.name}</p>
                             </div>
                             <div className='col-span-10 row-span-1 text-xs flex justify-end'>
-                                <p>{selectedEvent.location}</p>
+                                <span><p>{selectedEvent.date}</p></span>
+                                <span className='ml-2'><p>{selectedEvent.location}</p></span>
                             </div>
                         </div>
+
                     }
                 </div>
             </div>
             <animated.div className='z-40 relative left-0 top-0 w-96 h-20 rounded-b-xl flex items-end shadow-xl
-             px-4 py-4 bg-gradient-to-t from-slate-800 to-slate-600' style={{ ...springsInput }}>
+             px-4 py-4 bg-gradient-to-t from-slate-800 to-slate-600 rounded-lg' style={{ ...springsInput }}>
                 <div className='w-full'>
                     <Input onChange={handleInputChange} value={search} placeholder='Search Event' className='z-50 w-full' />
                     {searchResults &&
-                        <div className='flex-col z-100 absolute bg-white rounded-xl 
-                    rounded-t-none p-2 shadow-lg text-black z-50 w-[350px]'>
-                            {searchResults?.map((event: IEvent, index: any) => (
+                        <OutsideClickHandler onOutsideClick={() => {
+                            
+                            setSearchResults(null)
+                        }}>
+                            <div className={`flex-col z-100 absolute bg-white rounded-xl 
+                            rounded-t-none p-2 shadow-lg text-black z-50 w-[350px]`}>
+                                {showSearchResults && searchResults?.map((event: IEvent, index: any) => (
 
-                                <div onClick={() => handleSelectEvent({ id: event.id, name: event.name, image: event.images[0].url, location: event._embedded.venues[0].city.name + ' ' + event._embedded.venues[0].country.countryCode })} key={index} className='hover:bg-gray-300 hover:cursor-pointer flex space-x-2 text-center py-2'>
-                                    <Image src={event.images[0].url} alt="event-pic" width={50} height={50} /> <p>{event.name}</p>
-                                    <hr />
-                                </div>
+                                    <div onClick={() => handleSelectEvent({ id: event.id, name: event.name, image: event.images[0].url, location: event._embedded.venues[0].city.name + ' ' + event._embedded.venues[0].country.countryCode, date: event.dates.start.localDate })} key={index} className='hover:bg-gray-300 hover:cursor-pointer flex space-x-2 text-center py-2'>
+                                        <Image src={event.images[0].url} alt="event-pic" width={50} height={50} /> <p>{event.name}</p>
+                                        <hr />
+                                    </div>
 
-                            ))}
-                        </div>}
+                                ))}
+                            </div>
+                        </OutsideClickHandler>
+                    }
                 </div>
             </animated.div>
             <animated.div className='z-30 relative left-0 top-0 w-96 rounded-b-xl shadow-xl border-2 px-4 
@@ -215,22 +229,25 @@ function CreateGroup({ }: Props) {
 
                 </div>
                 <div className='w-full justify-end flex py-4'>
-                    <div className='flex justify-start w-full relative bg-honeymustard'>
+                    <div className='grid grid-flow-col w-full relative overflow-hidden'>
 
-                        {[1, 2, 3, 4, 5, 6, 7, 8, 9].slice(0, people).map((person, index) => (
-                            <div className={`absolute z-${2*people}`}>
-                                <RoundedProfilePicture>
-                                    <UserRound />
-                                </RoundedProfilePicture>
-                            </div>
-                        ))}
-                
-                        
+                        {
+                            [0, 1, 2, 3, 4, 5, 6,].slice(0, people).map((person, index) => (
+                                <div className={`absolute top-0 left-0 translate-x-[${(person) * 24}px] w-8`}>
+                                    <div className={`shadow-md rounded-full w-8 h-8 flex justify-center items-center text-sm font-bold bg-gradient-to-t from-green-500 to-green-300`}>
+                                        <UserRound />
+                                    </div>
+                                </div>
+                            ))
+                        }
+                     
+
                     </div>
                     <Button className='bg-green-600 h-10' onClick={() => alert('Group Created')}>CREATE GROUP</Button>
                 </div>
-            </animated.div>
-        </div>
+            </animated.div >
+
+        </div >
     )
 }
 
