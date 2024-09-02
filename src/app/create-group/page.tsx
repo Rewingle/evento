@@ -20,6 +20,7 @@ import { getSearchEventsByLocation } from '@/services/eventService';
 import { IEvent } from '@/models/Event';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
+import CreateGroup from '@/components/CreateGroup';
 
 type Props = {}
 interface City {
@@ -33,15 +34,11 @@ interface Country {
 }
 
 
-function CreateGroup({ }: Props) {
-
-   
+function CreateGroupPage({ }: Props) {
 
     return (
-        <div className='relative'>
-      
-        </div>
+        <CreateGroup/>
     )
 }
 
-export default CreateGroup
+export default CreateGroupPage

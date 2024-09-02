@@ -22,6 +22,8 @@ import Image from 'next/image';
 import { countries } from '@/lib/data/countries';
 import { Slider } from "@/components/ui/slider"
 import { cn } from "@/lib/utils"
+import RoundedProfilePicture from './RoundedProfilePicture';
+import { UserRound } from 'lucide-react';
 
 type Props = {}
 interface City {
@@ -47,7 +49,7 @@ function CreateGroup({ }: Props) {
     const [selectedEvent, setSelectecEvent] = React.useState<{ id: string, name: string, image: string, location: string } | null>(null)
     const [isCityDisabled, setCityDisabled] = React.useState<boolean>(true)
 
-    const [people, setPeople] = React.useState<number[]>([1])
+    const [people, setPeople] = React.useState<number>(1)
 
     const [springsCountry, apiCountry] = useSpring(() => ({
         from: { width: 350 },
@@ -56,7 +58,7 @@ function CreateGroup({ }: Props) {
         from: { y: 0 },
     }))
     const [springsPeople, apiPeople] = useSpring(() => ({
-        from: { y: 0, height: 0 },
+        from: { display: 'none', y: 0, height: 0 },
     }))
 
     const handleCountry = async (country: any) => {
@@ -95,15 +97,26 @@ function CreateGroup({ }: Props) {
         setSearch('')
         apiPeople.start({
             from: {
+                display: 'none',
                 y: 0,
                 height: 0
             },
             to: {
+                display: 'block',
                 y: 150,
-                height: 120
+                height: 200
             }
         })
     }
+    const PeoplePreview = ()=>{
+        for(let i = 0; i < people; i++){
+            console.log(people)
+            return <RoundedProfilePicture>
+                <UserRound />
+            </RoundedProfilePicture>
+        }
+    }
+
     return (
         <div className='relative'>
             <div className='z-50 absolute w-96 h-44 rounded-xl shadow-xl border-2 
@@ -114,7 +127,7 @@ function CreateGroup({ }: Props) {
                 </div>
                 <div className='row-span-4 py-4 flex justify-evenly space-x-4 items-center' >
                     <animated.div style={{ ...springsCountry }}>
-                        <Select /* disabled={isCountryDisabled} */ onValueChange={handleCountry}>
+                        <Select disabled={!countries} onValueChange={handleCountry}>
                             <SelectTrigger className="bg-transparent text-white">
                                 <SelectValue placeholder={<span className='flex justify-evenly space-x-4 items-center'><Earth color='white' /> <p>Select a Country</p></span>} />
                             </SelectTrigger>
@@ -183,21 +196,39 @@ function CreateGroup({ }: Props) {
                 </div>
             </animated.div>
             <animated.div className='z-30 relative left-0 top-0 w-96 rounded-b-xl shadow-xl border-2 px-4 
-            py-4 bg-gradient-to-t from-slate-700 to-slate-600 items-end' style={{ ...springsPeople }}>
+            py-4 pt-8 bg-gradient-to-t from-slate-700 to-slate-600 items-end' style={{ ...springsPeople }}>
                 <div className='w-full text-white'>
                     How many people are you going with ?
                 </div>
                 <br />
-                <div>
+                <div className='flex'>
                     <Slider
-                        defaultValue={[1]}
-                        max={10}
-                        step={0}
-                        onValueChange={(value) => setPeople(value)}
-                        className={cn("w-[60%]")}
+                        defaultValue={[0]}
+                        max={9}
+                        step={1}
+                        onValueChange={(value: any) => { let newValue = parseInt(value) as number + 1; setPeople(newValue) }}
+                        className={cn("w-[65%]")}
                     />
+                    <div className='text-center ml-4 text-white font-bold text-lg'>
+                        {people == 10 ? <p>NO LIMIT</p> : <p>{people + ' person'}</p>}
+                    </div>
+
                 </div>
-                {people[0]}
+                <div className='w-full justify-end flex py-4'>
+                    <div className='flex justify-start w-full relative bg-honeymustard'>
+
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9].slice(0, people).map((person, index) => (
+                            <div className={`absolute z-${2*people}`}>
+                                <RoundedProfilePicture>
+                                    <UserRound />
+                                </RoundedProfilePicture>
+                            </div>
+                        ))}
+                
+                        
+                    </div>
+                    <Button className='bg-green-600 h-10' onClick={() => alert('Group Created')}>CREATE GROUP</Button>
+                </div>
             </animated.div>
         </div>
     )
