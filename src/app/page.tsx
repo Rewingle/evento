@@ -1,4 +1,5 @@
 import getEvents from "@/actions/getConcerts";
+import CreateGroup from "@/components/CreateGroup";
 import ConcertCard from "@/components/ui/concertCard";
 import { Settings2 } from 'lucide-react';
 
@@ -24,6 +25,8 @@ export default async function Home() {
   return (
     <Suspense fallback={<div className="font-bold text-2xl">LOADING</div>}>
       <main className="flex min-h-screen flex-col items-center">
+        <CreateGroup/>
+        <br />
         <div className="flex justify-evenly items-center w-full">
           {genres?.map((genre:string, index:number) => (
             <Link href={'/categories' + ' category.url'}>

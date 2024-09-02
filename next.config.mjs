@@ -16,6 +16,12 @@ const nextConfig = {
             },
             {
                 protocol: 'https',
+                hostname: 'media.ticketmaster.eu',
+                port: '',
+                pathname: '/**'
+            },
+            {
+                protocol: 'https',
                 hostname: 'storage.googleapis.com',
                 port: '',
                 pathname: '/**'
