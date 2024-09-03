@@ -1,13 +1,25 @@
 "use server"
+import { CreateGroupParamsType } from "@/models/Group"
+import { createGroupService } from "@/services/group"
 
-interface CreateGroupParams {
-    createdBy: string,
-    eventId: string,
-    personLimit: number | 'no_limit',
-    groupName: string,
-
-}
-
-export default async function createGroup(CreateGroupParams:CreateGroupParams) {
-    
+export default async function createGroupAction(params: CreateGroupParamsType) {
+    const {createdBy, eventId, personLimit, groupName} = params
+    const values = {
+        name: groupName,
+        createdBy: createdBy,
+        eventId: eventId,
+        personLimit: personLimit == 10 ? 0 : personLimit,
+        private: false,
+        description: "",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        members: [
+            {
+                connect: {
+                    id: createdBy
+                }
+            }
+        ]
+    }
+    createGroupService(values)
 }

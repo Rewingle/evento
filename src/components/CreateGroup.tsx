@@ -25,6 +25,7 @@ import { UserRound, University, Earth } from 'lucide-react';
 import OutsideClickHandler from 'react-outside-click-handler';
 import PulseLoader from "react-spinners/PulseLoader";
 import createGroup from '@/actions/createGroup';
+import createGroupAction from '@/actions/createGroup';
 
 type Props = {}
 interface City {
@@ -119,10 +120,10 @@ function CreateGroup({ user }: any) {
     const handleCreate = () => {
         setCreateLoading(true)
         if (selectedEvent?.id && people && groupName) {
-            createGroup({
+            createGroupAction({
                 createdBy: user.id,
                 eventId: selectedEvent.id,
-                personLimit: people == 10 ? 'no_limit' : people,
+                personLimit: people,
                 groupName: groupName
             })
            
