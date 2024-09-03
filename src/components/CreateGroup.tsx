@@ -20,14 +20,13 @@ import Image from 'next/image';
 import { countries } from '@/lib/data/countries';
 import { Slider } from "@/components/ui/slider"
 import { cn } from "@/lib/utils"
-import RoundedProfilePicture from './RoundedProfilePicture';
-import { UserRound, University, Earth } from 'lucide-react';
+import { University, Earth } from 'lucide-react';
 import OutsideClickHandler from 'react-outside-click-handler';
 import PulseLoader from "react-spinners/PulseLoader";
-import createGroup from '@/actions/createGroup';
-import createGroupAction from '@/actions/createGroup';
+import createGroupAction from '@/actions/groups/createGroupAction';
+import { useRouter } from 'next/navigation';
+import { Group } from '@prisma/client';
 
-type Props = {}
 interface City {
     name: string
     lat: string
@@ -40,7 +39,7 @@ interface Country {
 }
 
 function CreateGroup({ user }: any) {
-
+    const router = useRouter()
 
     const [searchResults, setSearchResults] = React.useState<any | null>(null)
     const [search, setSearch] = React.useState<string>('')
@@ -84,11 +83,9 @@ function CreateGroup({ user }: any) {
         setSelectedCity(city)
         apiInput.start({
             from: {
-
                 y: 0,
             },
             to: {
-
                 y: 160,
             }
         })
@@ -117,7 +114,7 @@ function CreateGroup({ user }: any) {
         })
     }
 
-    const handleCreate = () => {
+    const handleCreate = async () => {
         setCreateLoading(true)
         if (selectedEvent?.id && people && groupName) {
             createGroupAction({
@@ -125,8 +122,18 @@ function CreateGroup({ user }: any) {
                 eventId: selectedEvent.id,
                 personLimit: people,
                 groupName: groupName
+            }).then((res: any) => {
+                const group = res.data as Group
+                if (group.id) {
+                    router.push('/groups/id/' + group.id)
+                } else {
+                    alert('Something went wrong')
+                }
+                setCreateLoading(false)
+            }).catch((e) => {
+                console.log(e)
+                alert(e)
             })
-           
         }
         setCreateLoading(false)
     }

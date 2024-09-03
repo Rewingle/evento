@@ -1,9 +1,10 @@
 "use server"
+import apiResponse from "@/lib/apiReturn"
 import { CreateGroupParamsType } from "@/models/Group"
 import { createGroupService } from "@/services/group"
 
 export default async function createGroupAction(params: CreateGroupParamsType) {
-    const {createdBy, eventId, personLimit, groupName} = params
+    const { createdBy, eventId, personLimit, groupName } = params
     const values = {
         name: groupName,
         createdBy: createdBy,
@@ -21,5 +22,10 @@ export default async function createGroupAction(params: CreateGroupParamsType) {
             }
         ]
     }
-    createGroupService(values)
+    console.log(values)
+    const data = await createGroupService(values)
+    if (!data) {
+        return apiResponse(500, null)
+    }
+    return apiResponse(201, data, "Group created successfully")
 }
