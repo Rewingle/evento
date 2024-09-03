@@ -1,7 +1,5 @@
 "use client"
 import { Button } from '@/components/ui/button'
-import { Earth } from 'lucide-react';
-import { University } from 'lucide-react';
 import Link from 'next/link';
 import {
     Select,
@@ -13,8 +11,8 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { useSpring, animated } from '@react-spring/web'
-import React, { useCallback } from 'react'
-import { getCitiesService, getCountriesService } from '@/services/location';
+import React from 'react'
+import { getCitiesService } from '@/services/location';
 import { Input } from '@/components/ui/input';
 import { getSearchEventsByLocation } from '@/services/eventService';
 import { IEvent } from '@/models/Event';
@@ -23,8 +21,9 @@ import { countries } from '@/lib/data/countries';
 import { Slider } from "@/components/ui/slider"
 import { cn } from "@/lib/utils"
 import RoundedProfilePicture from './RoundedProfilePicture';
-import { UserRound } from 'lucide-react';
+import { UserRound, University, Earth } from 'lucide-react';
 import OutsideClickHandler from 'react-outside-click-handler';
+import ClipLoader from "react-spinners/ClipLoader";
 
 type Props = {}
 interface City {
@@ -44,6 +43,7 @@ function CreateGroup({ }: Props) {
     const [search, setSearch] = React.useState<string>('')
     const [selectedCountry, setSelectedCountry] = React.useState<Country | null>(null)
     const [showSearchResults, setShowSearchResults] = React.useState<boolean>(false)
+    const [createLoading, setCreateLoading] = React.useState<boolean>(false)
 
     const [selectedCity, setSelectedCity] = React.useState<City | null>(null)
     const [cities, setCities] = React.useState<City[] | null>(null)
@@ -108,7 +108,7 @@ function CreateGroup({ }: Props) {
             },
             to: {
                 display: 'block',
-                y: 150,
+                y: 50,
                 height: 200
             }
         })
@@ -121,10 +121,14 @@ function CreateGroup({ }: Props) {
             </RoundedProfilePicture>
         }
     }
-
+    const handleCreate = () => {
+        setCreateLoading(true)
+    }
     return (
-        <div>
-            <div className='z-50 absolute w-96 h-44 rounded-xl shadow-xl border-2 
+        <div className='grid grid-cols-1 relative place-items-center'>
+         
+            {/* MAIN SLIDER */}
+            <div className='row-span-1 col-span-1 w-96 h-44 rounded-xl z-50 shadow-xl border-2 
             border-black p-4 bg-gradient-to-t from-slate-950 to-slate-800 
             grid grid-rows-5 overflow-hidden'>
                 <div className='items-center flex justify-start text-md font-bold text-white row-span-1'>
@@ -185,13 +189,14 @@ function CreateGroup({ }: Props) {
                     }
                 </div>
             </div>
-            <animated.div className='z-40 relative left-0 top-0 w-96 h-20 rounded-b-xl flex items-end shadow-xl
+           
+            {/* INPUT SLIDER */}
+            <animated.div className='row-span-1 col-span-1 z-40 absolute left-0 top-0 w-96 h-20 rounded-b-xl flex items-end shadow-xl
              px-4 py-4 bg-gradient-to-t from-slate-800 to-slate-600 rounded-lg' style={{ ...springsInput }}>
                 <div className='w-full'>
                     <Input onChange={handleInputChange} value={search} placeholder='Search Event' className='z-50 w-full' />
                     {searchResults &&
                         <OutsideClickHandler onOutsideClick={() => {
-                            
                             setSearchResults(null)
                         }}>
                             <div className={`flex-col z-100 absolute bg-white rounded-xl 
@@ -209,7 +214,8 @@ function CreateGroup({ }: Props) {
                     }
                 </div>
             </animated.div>
-            <animated.div className='z-30 relative left-0 top-0 w-96 rounded-b-xl shadow-xl border-2 px-4 
+            {/* PEOPLE SLIDER */}
+            <animated.div className='p-[50px] row-span-1 col-span-1 z-30 relative left-0 top-0 w-96 rounded-b-xl shadow-xl border-2 px-4 
             py-4 pt-8 bg-gradient-to-t from-slate-700 to-slate-600 items-end' style={{ ...springsPeople }}>
                 <div className='w-full text-white'>
                     How many people are you going with ?
@@ -231,22 +237,10 @@ function CreateGroup({ }: Props) {
                 <div className='w-full justify-end flex py-4'>
                     <div className='grid grid-flow-col w-full relative overflow-hidden'>
 
-                        {
-                            [0, 1, 2, 3, 4, 5, 6,].slice(0, people).map((person, index) => (
-                                <div className={`absolute top-0 left-0 translate-x-[${(person) * 24}px] w-8`}>
-                                    <div className={`shadow-md rounded-full w-8 h-8 flex justify-center items-center text-sm font-bold bg-gradient-to-t from-green-500 to-green-300`}>
-                                        <UserRound />
-                                    </div>
-                                </div>
-                            ))
-                        }
-                     
-
                     </div>
-                    <Button className='bg-green-600 h-10' onClick={() => alert('Group Created')}>CREATE GROUP</Button>
+                    <Button className='bg-green-600 h-10' onClick={handleCreate}>CREATE GROUP</Button>
                 </div>
             </animated.div >
-
         </div >
     )
 }
