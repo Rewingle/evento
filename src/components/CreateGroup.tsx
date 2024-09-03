@@ -23,7 +23,8 @@ import { cn } from "@/lib/utils"
 import RoundedProfilePicture from './RoundedProfilePicture';
 import { UserRound, University, Earth } from 'lucide-react';
 import OutsideClickHandler from 'react-outside-click-handler';
-import ClipLoader from "react-spinners/ClipLoader";
+import PulseLoader from "react-spinners/PulseLoader";
+import createGroup from '@/actions/createGroup';
 
 type Props = {}
 interface City {
@@ -37,14 +38,15 @@ interface Country {
     iso2: string
 }
 
-function CreateGroup({ }: Props) {
+function CreateGroup({ user }: any) {
+
 
     const [searchResults, setSearchResults] = React.useState<any | null>(null)
     const [search, setSearch] = React.useState<string>('')
     const [selectedCountry, setSelectedCountry] = React.useState<Country | null>(null)
     const [showSearchResults, setShowSearchResults] = React.useState<boolean>(false)
     const [createLoading, setCreateLoading] = React.useState<boolean>(false)
-
+    const [groupName, setGroupName] = React.useState<string>('')
     const [selectedCity, setSelectedCity] = React.useState<City | null>(null)
     const [cities, setCities] = React.useState<City[] | null>(null)
 
@@ -108,25 +110,28 @@ function CreateGroup({ }: Props) {
             },
             to: {
                 display: 'block',
-                y: 50,
+                y: 220,
                 height: 200
             }
         })
     }
-    const PeoplePreview = () => {
-        for (let i = 0; i < people; i++) {
-            console.log(people)
-            return <RoundedProfilePicture>
-                <UserRound />
-            </RoundedProfilePicture>
-        }
-    }
+
     const handleCreate = () => {
         setCreateLoading(true)
+        if (selectedEvent?.id && people && groupName) {
+            createGroup({
+                createdBy: user.id,
+                eventId: selectedEvent.id,
+                personLimit: people == 10 ? 'no_limit' : people,
+                groupName: groupName
+            })
+           
+        }
+        setCreateLoading(false)
     }
     return (
-        <div className='grid grid-cols-1 relative place-items-center'>
-         
+        <div className='grid grid-cols-1 relative'>
+
             {/* MAIN SLIDER */}
             <div className='row-span-1 col-span-1 w-96 h-44 rounded-xl z-50 shadow-xl border-2 
             border-black p-4 bg-gradient-to-t from-slate-950 to-slate-800 
@@ -189,7 +194,7 @@ function CreateGroup({ }: Props) {
                     }
                 </div>
             </div>
-           
+
             {/* INPUT SLIDER */}
             <animated.div className='row-span-1 col-span-1 z-40 absolute left-0 top-0 w-96 h-20 rounded-b-xl flex items-end shadow-xl
              px-4 py-4 bg-gradient-to-t from-slate-800 to-slate-600 rounded-lg' style={{ ...springsInput }}>
@@ -215,8 +220,8 @@ function CreateGroup({ }: Props) {
                 </div>
             </animated.div>
             {/* PEOPLE SLIDER */}
-            <animated.div className='p-[50px] row-span-1 col-span-1 z-30 relative left-0 top-0 w-96 rounded-b-xl shadow-xl border-2 px-4 
-            py-4 pt-8 bg-gradient-to-t from-slate-700 to-slate-600 items-end' style={{ ...springsPeople }}>
+            <animated.div className='row-span-1 col-span-1 z-30 absolute left-0 top-0 w-96 rounded-b-xl shadow-xl border-2 px-4 
+             py-2 pt-8 bg-gradient-to-t from-slate-700 to-slate-600 items-end' style={{ ...springsPeople }}>
                 <div className='w-full text-white'>
                     How many people are you going with ?
                 </div>
@@ -234,11 +239,16 @@ function CreateGroup({ }: Props) {
                     </div>
 
                 </div>
-                <div className='w-full justify-end flex py-4'>
-                    <div className='grid grid-flow-col w-full relative overflow-hidden'>
-
+                <div className='py-2'>
+                    <div className='text-white text-xs mb-2'>Group name:</div>
+                    <div className='w-full grid grid-cols-6 gap-4'>
+                        <div className='col-span-4'>
+                            <div className='grid grid-flow-col w-full relative overflow-hidden'>
+                                <Input onChange={(e) => setGroupName(e.target.value)} placeholder={`${user.name}'s Group `} />
+                            </div>
+                        </div>
+                        <Button className=' col-span-2 bg-gradient-to-t from-green-500 to-green-400 h-10' onClick={handleCreate}>{createLoading ? <PulseLoader color='#1e293b' /> : <p className='font-bold'>CREATE</p>}</Button>
                     </div>
-                    <Button className='bg-green-600 h-10' onClick={handleCreate}>CREATE GROUP</Button>
                 </div>
             </animated.div >
         </div >
