@@ -1,5 +1,5 @@
 "use server"
-import apiResponse from "@/lib/apiReturn"
+import apiResponse from "@/lib/apiResponse"
 import { CreateGroupParamsType } from "@/models/Group"
 import { createGroupService } from "@/services/group"
 

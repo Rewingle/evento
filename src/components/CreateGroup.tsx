@@ -252,7 +252,7 @@ function CreateGroup({ user }: any) {
                     <div className='w-full grid grid-cols-6 gap-4'>
                         <div className='col-span-4'>
                             <div className='grid grid-flow-col w-full relative overflow-hidden'>
-                                <Input onChange={(e) => setGroupName(e.target.value)} placeholder={`${user.name}'s Group `} />
+                                <Input onChange={(e) => setGroupName(e.target.value)} placeholder={`${user?.name}'s Group `} />
                             </div>
                         </div>
                         <Button className=' col-span-2 bg-gradient-to-t from-green-500 to-green-400 h-10' onClick={handleCreate}>{createLoading ? <PulseLoader color='#1e293b' /> : <p className='font-bold'>CREATE</p>}</Button>
