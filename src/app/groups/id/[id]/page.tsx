@@ -6,15 +6,18 @@ import { Group } from '@prisma/client'
 import { useEffect, useState } from 'react'
 import MoonLoader from 'react-spinners/MoonLoader'
 import { SendHorizontal } from 'lucide-react';
-import MessageBubble from '@/components/MessageBubble'
+import { MessageBubbleReceived, MessageBubbleSend } from '@/components/MessageBubble'
+import { useCurrentUser } from '@/hooks/useCurrentUser'
 function GroupPage({ params }: { params: { id: string } }) {
 
   const [groupData, setGroupData] = useState<Group | null>(null)
   const [messages, setMessages] = useState<string[] | []>([])
+  const [user, setUser] = useState<any>(null)
   useEffect(() => {
     const getGroup = async () => {
       const response = await getGroupAction(params.id)
-
+      const user = await useCurrentUser()
+      setUser(user)
       if (response.statusCode !== 200) {
         return (
           <div>Group not found</div>
@@ -26,13 +29,13 @@ function GroupPage({ params }: { params: { id: string } }) {
   }, [])
   function sendMessage(formData: FormData) {
     const message = formData.get("message");
-    /* alert(`You searched for '${message}'`); */
+
     setMessages((prevMessages: any) => [...prevMessages, message]);
   }
 
   return (
     <div className='w-full h-full'>
-      {groupData ? <>
+      {groupData && user ? <>
         <div className='w-full h-full grid md:grid-cols-10 grid-rows-10 gap-4'>
           <div className='hidden md:grid col-span-3 row-span-10 gap-4'>
             <div className='row-span-1'>
@@ -41,7 +44,6 @@ function GroupPage({ params }: { params: { id: string } }) {
               </div>
             </div>
             <div className='row-span-1 shadow-lg rounded-lg size-full '>
-
             </div>
           </div>
           <div className='grid grid-rows-12 row-span-10 col-span-7'>
@@ -55,9 +57,9 @@ function GroupPage({ params }: { params: { id: string } }) {
               <div className='row-span-9 space-y-4 py-4 bg-gray-100 overflow-y-scroll'>
                 {
                   messages?.map((message, index) => (
-
-                    <MessageBubble key={index} message={message} />
-
+                    <div className='flex justify-end'>
+                      <MessageBubbleSend key={index} message={message} user={user.name} />
+                    </div>
                   ))
                 }
               </div>
@@ -74,7 +76,7 @@ function GroupPage({ params }: { params: { id: string } }) {
             </div>
           </div>
         </div>
-      </> : <MoonLoader></MoonLoader>
+      </> : <MoonLoader />
       }
     </div>
   )
