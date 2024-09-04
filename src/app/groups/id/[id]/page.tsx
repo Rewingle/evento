@@ -6,11 +6,11 @@ import { Group } from '@prisma/client'
 import { useEffect, useState } from 'react'
 import MoonLoader from 'react-spinners/MoonLoader'
 import { SendHorizontal } from 'lucide-react';
-
+import MessageBubble from '@/components/MessageBubble'
 function GroupPage({ params }: { params: { id: string } }) {
 
   const [groupData, setGroupData] = useState<Group | null>(null)
-
+  const [messages, setMessages] = useState<string[] | []>([])
   useEffect(() => {
     const getGroup = async () => {
       const response = await getGroupAction(params.id)
@@ -24,10 +24,12 @@ function GroupPage({ params }: { params: { id: string } }) {
     }
     getGroup()
   }, [])
-  function sendMessage(formData:FormData) {
+  function sendMessage(formData: FormData) {
     const message = formData.get("message");
-    alert(`You searched for '${message}'`);
+    /* alert(`You searched for '${message}'`); */
+    setMessages((prevMessages: any) => [...prevMessages, message]);
   }
+
   return (
     <div className='w-full h-full'>
       {groupData ? <>
@@ -50,12 +52,19 @@ function GroupPage({ params }: { params: { id: string } }) {
               </div>
             </div>
             <div className='row-span-11 grid grid-rows-10'>
-              <div className='row-span-9 bg-gray-100'></div>
+              <div className='row-span-9 space-y-4 py-4 bg-gray-100 overflow-y-scroll'>
+                {
+                  messages?.map((message, index) => (
+
+                    <MessageBubble key={index} message={message} />
+
+                  ))
+                }
+              </div>
               <form action={sendMessage}>
                 <div className='row-span-1 grid grid-cols-6 bg-white shadow-xl rounded-xl size-full px-4 items-center'>
-
                   <div className='col-span-5'>
-                    <Input name='message' id='message' className='w-full ' />
+                    <Input name='message' id='message' className='w-full text-lg' />
                   </div>
                   <div className='col-span-1 flex justify-center'>
                     <Button className='rounded-3xl w-16 h-12' type='submit'><SendHorizontal /></Button>
