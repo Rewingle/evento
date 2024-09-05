@@ -43,26 +43,28 @@ function GroupPage({ params }: { params: { id: string } }) {
     <div className='w-full h-full'>
       {groupData && user ? <>
         <div className='w-full h-full grid md:grid-cols-10 grid-rows-10 gap-4'>
-          <div className='hidden md:grid col-span-3 row-span-10 gap-4'>
-            <div className='row-span-1'>
-              <div className='p-4 grid grid-rows-10 shadow-2xl rounded-tl-lg bg-gradient-to-t from-slate-950 to-slate-800 size-full text-white text-center'>
-                <div className='row-span-2'>
-                  <div className='font-bold text-xl '>{groupData.event.name}</div>
-                  <div className=''>{groupData.event._embedded.venues[0].name}</div>
+          <div className='hidden md:grid col-span-3 row-span-10 gap-4 grid-rows-4'>
+
+            <div className='p-4 row-span-2 grid grid-rows-10 shadow-2xl rounded-tl-lg bg-gradient-to-t from-slate-950 to-slate-800 size-full text-white text-center'>
+              <div className='row-span-2'>
+                <div className='font-bold text-xl '>{groupData.event.name}</div>
+                <div className=''>{groupData.event._embedded.venues[0].name}</div>
+              </div>
+              <div className='w-full row-span-4 bg-gray-400'></div>
+              <div className='row-span-2 px-6 flex justify-between items-center text-xl'>
+                <div>
+                  <div className='space-x-2 flex text-white'><Clock color='white' /><p>{groupData.event.dates.start.localTime.slice(0, 5)}</p></div>
                 </div>
-                <div className='w-full row-span-5 bg-red-400'></div>
-                <div className='row-span-3 p-6'>
-                  <div>
-                    <div className='space-x-2 flex text-white'><Clock color='white' /><p>{groupData.event.dates.start.localTime.slice(0, 5)}</p></div>
-                  </div>
-                  <div>
-                    <div className='text-white'>{groupData.event.dates.start.dateTime}</div>
-                  </div>
+                <div>
+                  <div className='text-white'>{groupData.event.dates.start.localDate}</div>
                 </div>
               </div>
+              <div className='row-span-2 flex justify-end'>
+                <Button className='bg-slate-600'>BUY TICKET</Button>
+              </div>
             </div>
-            <div className='row-span-1 shadow-lg rounded-lg size-full py-4'>
 
+            <div className='row-span-3 shadow-lg rounded-lg size-full py-4'>
               {groupData.members.map((member, index) => (
                 <div className='px-2 grid grid-cols-10 py-1 shadow-sm'>
                   <div className='col-span-2 hover:cursor-pointer'>
@@ -72,11 +74,11 @@ function GroupPage({ params }: { params: { id: string } }) {
                   <div className='col-span-3 flex justify-end items-center'><MessageSquare className='text-gray-500 hover:text-black hover:cursor-pointer' /></div>
                 </div>
               ))}
-
             </div>
+
           </div>
           <div className='grid grid-rows-12 row-span-10 col-span-7'>
-            <div className='row-span-1 grid grid-cols-5  rounded-tr-lg items-center bg-gradient-to-r from-slate-950 from-70% to-slate-900 via-30% text-white'>
+            <div className='row-span-1 grid grid-cols-5  rounded-tr-lg items-center bg-gradient-to-l from-slate-950 to-slate-800 text-white'>
               <div className='col-span-3 px-8 font-bold text-xl'>{groupData.name}</div>
               <div className='col-span-2 rounded-tr-lg size-full text-white flex items-center justify-center'>
                 <p>12 online</p>
