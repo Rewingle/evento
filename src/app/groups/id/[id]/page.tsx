@@ -17,7 +17,7 @@ function GroupPage({ params }: { params: { id: string } }) {
   const [messages, setMessages] = useState<string[] | []>([])
   const [message, setMessage] = useState<string>("")
   const [user, setUser] = useState<any>(null)
-  setUser(useCurrentUser())
+  /* setUser(useCurrentUser()) */
   useEffect(() => {
     const getGroup = async () => {
       const response = await getGroupAction(params.id)
@@ -40,7 +40,7 @@ function GroupPage({ params }: { params: { id: string } }) {
 
   return (
     <div className='w-full h-full'>
-      {groupData && user ? <>
+      {groupData /* && user */ ? <>
         <div className='w-full h-full grid md:grid-cols-10 grid-rows-10 gap-4'>
           <div className='hidden md:grid col-span-3 row-span-10 gap-4 grid-rows-4'>
 
