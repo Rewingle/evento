@@ -19,13 +19,13 @@ function CompleteYourProfile({ }: Props) {
     const [userName, setUserName] = useState("")
     const [bio, setBio] = useState("")
     const [isStepOne, setIsStepOne] = useState(true)
-    useEffect(() => {
+  /*   useEffect(() => {
         async function getUser() {
             const user: any = await useCurrentUser()
             setUserName(user?.name)
         }
         getUser()
-    }, [])
+    }, []) */
 
     const [isPending, startTransition] = useTransition();
 
