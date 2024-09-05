@@ -1,31 +1,22 @@
 "use client"
-
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { countries } from "@/lib/data/countries";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import { Popover, PopoverContent } from "./ui/popover";
 import { MapPin } from "lucide-react";
 import { Button } from "./ui/button";
-import { useLocation } from "@/app/store/store";
 import { getCookie, setCookie } from "cookies-next"
-import { db } from '@/lib/db';
-import { getCountriesService, getCitiesService } from "@/services/location";
+import {  getCitiesService } from "@/services/location";
 
 interface City {
     name: string
     lat: string
     lng: string
 }
-interface Country {
-    name: string
-    iso2: string
-}
-
 function Location() {
 
     const [cities, setCities] = useState<City[] | null>(null)
-    const [countries, setCountries] = useState<Country[] | null>(null)
 
     const [city, setCity] = useState<{ name: string, lat: string, lng: string } | null>(null)
     const [country, setCountry] = useState<{ name: string, iso2: string } | null>(null)
@@ -57,14 +48,6 @@ function Location() {
 
     //DISABLED FOR PRICING
 
-    useEffect(() => {
-        const getCountry = async () => {
-            const countries = await getCountriesService() as Country[]
-            console.log(countries)
-            setCountries(countries)
-        }
-        getCountry()
-    }, [])
 
     useEffect(() => {
         try {
@@ -79,7 +62,6 @@ function Location() {
     const getCities = async (country: string) => {
         setDisabled(true)
         if (selectedCountry === country) return
-        console.log("GETTING IT")
         const cities = await getCitiesService(country) as City[]
         setCities(cities)
         setDisabled(false)

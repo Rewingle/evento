@@ -16,6 +16,21 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   gender    String
+  Group     Group?   @relation(fields: [groupId], references: [id])
+  groupId   String?
+}
+
+model Group {
+  id          String   @id @default(cuid())
+  name        String
+  eventId     String
+  createdBy   String
+  personLimit Int
+  private     Boolean
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  members     User[]
 }
 
 model cities {

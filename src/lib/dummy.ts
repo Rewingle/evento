@@ -1,40 +1,50 @@
-
-export const dummyPeople = [
+export const dummyPeople:{name:string,color:string}[] = [
     {
-        name: 'Mikael Åkerfeldt',
-        color: 'green'
+        name: "John Doe",
+        color: "red"
     },
     {
-        name: 'John Mendez',
-        color: 'blue'
+        name: "Jane Doe",
+        color: "blue"
     },
     {
-        name: 'Elijah Axenrot',
-        color: 'purple'
+        name: "Alice",
+        color: "green"
     },
     {
-        name: 'Fredrik Åkesson',
-        color: 'red'
+        name: "Bob",
+        color: "yellow"
     },
     {
-        name: 'Martin Mendez',
-        color: 'yellow'
+        name: "Eve",
+        color: "purple"
     },
     {
-        name: 'Per Wiberg',
-        color: 'orange'
+        name: "Charlie",
+        color: "orange"
     },
     {
-        name: 'Fredrik Åkesson',
-        color: 'red'
+        name: "Olivia",
+        color: "pink"
     },
     {
-        name: 'Martin Mendez',
-        color: 'yellow'
+        name: "Liam",
+        color: "brown"
     },
     {
-        name: 'Per Wiberg',
-        color: 'orange'
+        name: "Sophia",
+        color: "gray"
+    },
+    {
+        name: "Noah",
+        color: "teal"
+    },
+    {
+        name: "Ava",
+        color: "maroon"
+    },
+    {
+        name: "Mia",
+        color: "navy"
     }
-
 ]
