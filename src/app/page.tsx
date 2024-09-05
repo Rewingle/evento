@@ -5,7 +5,6 @@ import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { Settings2 } from 'lucide-react';
 
 import Link from "next/link";
-import { Suspense } from "react";
 import MoonLoader from "react-spinners/MoonLoader";
 
 export default async function Home() {
@@ -25,7 +24,7 @@ export default async function Home() {
   });
 
   return (
-    <Suspense fallback={<div className="font-bold text-2xl">LOADING</div>}>
+
       <main className="flex min-h-screen flex-col items-center">
         <div className="size-full grid grid-cols-5 grid-rows-5 gap-4">
 
@@ -35,15 +34,9 @@ export default async function Home() {
 
         </div>
         <div className="flex justify-evenly items-center w-full">
-<<<<<<< HEAD
           {genres?.map((genre:string, index:number) => (
             <Link key={index} href={'/categories' + ' category.url'}>
               <div className="rounded-2xl shadow-lg bg-white flex justify-center items-center text-lg py-2 px-4"> {genre}</div>
-=======
-          {genres?.map((genre: string, index: number) => (
-            <Link href={'/categories' + ' category.url'}>
-              <div key={index} className="rounded-2xl shadow-lg bg-white flex justify-center items-center text-lg py-2 px-4"> {genre}</div>
->>>>>>> 8f47eb815764c8954c54f7dcdcb6b6322b30549a
             </Link>
           ))}
           <div className="rounded-2xl shadow-lg bg-white flex justify-center items-center py-2 px-4 hover:cursor-pointer">
@@ -67,6 +60,5 @@ export default async function Home() {
         </div>
 
       </main>
-    </Suspense>
   );
 }
