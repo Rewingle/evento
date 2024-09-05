@@ -2,7 +2,7 @@
 import getGroupAction from '@/actions/groups/getGroupAction'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import type { Group } from '@prisma/client'
+/* import type { Group } from '@prisma/client' */
 import { useEffect, useState } from 'react'
 import MoonLoader from 'react-spinners/MoonLoader'
 import { SendHorizontal } from 'lucide-react';
@@ -13,7 +13,7 @@ import { IEvent } from '@/models/Event'
 import { Clock } from 'lucide-react'
 
 function GroupPage({ params }: { params: { id: string } }) {
-  const [groupData, setGroupData] = useState<Group & { members: any[], event: IEvent } | null>(null)
+  const [groupData, setGroupData] = useState<any & { members: any[], event: IEvent } | null>(null)
   const [messages, setMessages] = useState<string[] | []>([])
   const [message, setMessage] = useState<string>("")
   const [user, setUser] = useState<any>(null)
