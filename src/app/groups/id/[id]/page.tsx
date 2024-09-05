@@ -82,7 +82,7 @@ function GroupPage({ params }: { params: { id: string } }) {
               <div className='col-span-2 rounded-tr-lg size-full text-white flex items-center justify-center'>
                 <p>12 online</p>
               </div>
-            </div>
+            </div>  
             <div className='row-span-11 grid grid-rows-10'>
               <div className='row-span-9 space-y-4 py-4 bg-gray-100 overflow-y-scroll'>
                 {
