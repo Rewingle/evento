@@ -1,5 +1,8 @@
 "use server"
 import { db } from "@/lib/db"
+import { IEvent } from "@/models/Event"
+import { ticketmasterApi } from "./api"
+import { Group } from "@prisma/client"
 
 interface GroupType {
     name: string,
@@ -43,13 +46,27 @@ export async function createGroupService(CreateGroupParams: GroupType) {
 }
 
 export async function getGroupService(groupId: string) {
+    const PATH = '/discovery/v2'
+    const LOCALE = process.env.TICKETMASTER_LOCALE
+    const API_KEY = process.env.TICKETMASTER_API_KEY
+    
     try {
-        const db_result = await db.group.findUnique({
+        let db_result = await db.group.findUnique({
             where: {
                 id: groupId
+            },
+            include: {
+                members: true
             }
-        })
-        return db_result
+        }) as (Group & { event: IEvent }) | null
+        if(db_result) {
+            const { data: data } = await ticketmasterApi.get<IEvent>(`${PATH}/events/${db_result?.eventId}?apikey=${API_KEY}`)
+            db_result["event"] = data;
+            return db_result
+        }else{
+            return null
+        }
+        
     } catch (error) {
         return error
     }
