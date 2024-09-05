@@ -123,7 +123,7 @@ const LoginCard = (props: Props) => {
 
             </div>
             <div className='w-full text-center'>
-                <Link href={'/register'} className='hover:underline text-sm text-center'>You don't have an account?</Link>
+                <Link href={'/register'} className='hover:underline text-sm text-center'>{"You don't have an account?"}</Link>
             </div>
         </div>
     )

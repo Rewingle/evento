@@ -1,8 +1,7 @@
 "use server"
-import axios from "axios"
+
 import { ticketmasterApi } from "./api"
 import { IEvent } from "@/models/Event"
-import Geohash from 'latlon-geohash';
 import { cookies } from 'next/headers'
 
 const PATH = '/discovery/v2'
@@ -10,7 +9,7 @@ const LOCALE = process.env.TICKETMASTER_LOCALE
 const API_KEY = process.env.TICKETMASTER_API_KEY
 
 export async function getAllEventsService(size: number) {
-
+    console.log(API_KEY)
     try {
         const cookieStore = cookies()
         const city = cookieStore.get('city') as unknown as any

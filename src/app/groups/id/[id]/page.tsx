@@ -2,7 +2,7 @@
 import getGroupAction from '@/actions/groups/getGroupAction'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Group } from '@prisma/client'
+/* import type { Group } from '@prisma/client' */
 import { useEffect, useState } from 'react'
 import MoonLoader from 'react-spinners/MoonLoader'
 import { SendHorizontal } from 'lucide-react';
@@ -13,16 +13,15 @@ import { IEvent } from '@/models/Event'
 import { Clock } from 'lucide-react'
 
 function GroupPage({ params }: { params: { id: string } }) {
-  const [groupData, setGroupData] = useState<Group & { members: any[], event: IEvent } | null>(null)
+  const [groupData, setGroupData] = useState<any & { members: any[], event: IEvent } | null>(null)
   const [messages, setMessages] = useState<string[] | []>([])
   const [message, setMessage] = useState<string>("")
   const [user, setUser] = useState<any>(null)
+  /* setUser(useCurrentUser()) */
   useEffect(() => {
     const getGroup = async () => {
       const response = await getGroupAction(params.id)
-      console.log(response)
-      const user = await useCurrentUser()
-      setUser(user)
+
       if (response.statusCode !== 200) {
         return (
           <div>Group not found</div>
@@ -41,7 +40,7 @@ function GroupPage({ params }: { params: { id: string } }) {
 
   return (
     <div className='w-full h-full'>
-      {groupData && user ? <>
+      {groupData /* && user */ ? <>
         <div className='w-full h-full grid md:grid-cols-10 grid-rows-10 gap-4'>
           <div className='hidden md:grid col-span-3 row-span-10 gap-4 grid-rows-4'>
 
@@ -65,8 +64,8 @@ function GroupPage({ params }: { params: { id: string } }) {
             </div>
 
             <div className='row-span-3 shadow-lg rounded-lg size-full py-4'>
-              {groupData.members.map((member, index) => (
-                <div className='px-2 grid grid-cols-10 py-1 shadow-sm'>
+              {groupData.members.map((member: any, index: number) => (
+                <div key={index} className='px-2 grid grid-cols-10 py-1 shadow-sm'>
                   <div className='col-span-2 hover:cursor-pointer'>
                     <div className='rounded-full bg-red-400 h-8 w-8'></div>
                   </div>
@@ -83,12 +82,12 @@ function GroupPage({ params }: { params: { id: string } }) {
               <div className='col-span-2 rounded-tr-lg size-full text-white flex items-center justify-center'>
                 <p>12 online</p>
               </div>
-            </div>
+            </div>  
             <div className='row-span-11 grid grid-rows-10'>
               <div className='row-span-9 space-y-4 py-4 bg-gray-100 overflow-y-scroll'>
                 {
                   messages?.map((message, index) => (
-                    <div className='flex justify-end'>
+                    <div key={index} className='flex justify-end'>
                       <MessageBubbleSend key={index} message={message} user={user.name} />
                     </div>
                   ))
