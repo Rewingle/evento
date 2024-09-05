@@ -1,4 +1,4 @@
-"use client"
+/* "use client"
 import React from 'react'
 import ConcertCard from './ui/concertCard'
 import { useSearchStore } from '@/store'
@@ -28,4 +28,4 @@ const Events = (props: Props) => {
     )
 }
 
-export default Events
+export default Events */

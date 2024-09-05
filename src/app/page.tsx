@@ -22,8 +22,8 @@ export default async function Home() {
       <main className="flex min-h-screen flex-col items-center">
         <div className="flex justify-evenly items-center w-full">
           {genres?.map((genre:string, index:number) => (
-            <Link href={'/categories' + ' category.url'}>
-              <div key={index} className="rounded-2xl shadow-lg bg-white flex justify-center items-center text-lg py-2 px-4"> {genre}</div>
+            <Link key={index} href={'/categories' + ' category.url'}>
+              <div className="rounded-2xl shadow-lg bg-white flex justify-center items-center text-lg py-2 px-4"> {genre}</div>
             </Link>
           ))}
           <div className="rounded-2xl shadow-lg bg-white flex justify-center items-center py-2 px-4 hover:cursor-pointer">
