@@ -17,11 +17,11 @@ function GroupPage({ params }: { params: { id: string } }) {
   const [messages, setMessages] = useState<string[] | []>([])
   const [message, setMessage] = useState<string>("")
   const [user, setUser] = useState<any>(null)
-  setUser(useCurrentUser())
+ 
   useEffect(() => {
     const getGroup = async () => {
       const response = await getGroupAction(params.id)
-
+      setUser(useCurrentUser())
       if (response.statusCode !== 200) {
         return (
           <div>Group not found</div>
